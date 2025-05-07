@@ -126,6 +126,7 @@ const BestSellersCarousel: React.FC = () => {
           .map(item => item.product);
 
         setProducts(bestSellers);
+        console.log('Best sellers:', bestSellers);
       } catch (error) {
         console.error('Error fetching best sellers:', error);
       } finally {
@@ -144,6 +145,14 @@ const BestSellersCarousel: React.FC = () => {
             <div key={i} className="bg-gray-100 rounded-lg h-72 animate-pulse"></div>
           ))}
         </div>
+      </div>
+    );
+  }
+
+  if (!loading && products.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p className="text-gray-500">{t('home.noProductsFound')}</p>
       </div>
     );
   }

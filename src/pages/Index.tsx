@@ -135,7 +135,7 @@ const Index = () => {
         return 0;
       });
     return filtered;
-  }, [products, sortField, sortOrder, searchQuery, i18n.language, genderFilter, sizeFilter, materialFilter, brandFilter, priceRange]);
+  }, [products, getLocalizedField, searchQuery, genderFilter, materialFilter, brandFilter, sizeFilter, priceRange, sortField, sortOrder]);
 
   // Debug log for carousel products
   const carouselProducts = useMemo(() => {
