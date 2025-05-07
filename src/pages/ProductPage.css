@@ -1,0 +1,188 @@
+/* ProductPage.css */
+
+.zoom-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #f3f4f6;
+  width: 100%;
+  height: 100%;
+}
+
+.zoom-image {
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s;
+  will-change: transform;
+  cursor: zoom-in;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .zoom-container:hover .zoom-image {
+    transform: scale(1.25);
+    box-shadow: 0 8px 32px 0 rgba(80, 36, 255, 0.12);
+    z-index: 2;
+    cursor: zoom-out;
+  }
+}
+
+/* Discount badge animation */
+.animate-fade-in {
+  animation: fadeInBadge 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes fadeInBadge {
+  from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Thumbnails grid improvements */
+.grid-cols-4 > button {
+  border: 2px solid transparent;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  background: #fff;
+  box-shadow: 0 1px 4px 0 rgba(80,36,255,0.04);
+}
+.grid-cols-4 > button.ring-2 {
+  border-color: #7c3aed; /* ecommerce-purple */
+  box-shadow: 0 0 0 2px #ede9fe, 0 4px 16px 0 rgba(124,58,237,0.08);
+  z-index: 1;
+}
+.grid-cols-4 > button:hover {
+  box-shadow: 0 2px 8px 0 rgba(80,36,255,0.10);
+  transform: scale(1.04);
+}
+
+/* Product info card */
+.bg-white\/80 {
+  background: rgba(255,255,255,0.92) !important;
+  backdrop-filter: blur(2px);
+}
+.shadow-2xl {
+  box-shadow: 0 8px 32px 0 rgba(80,36,255,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+}
+
+/* Related products section */
+.bg-gradient-to-r.from-purple-50.to-pink-50 {
+  background: linear-gradient(90deg, #faf5ff 0%, #fdf2f8 100%);
+}
+.shadow-inner {
+  box-shadow: 0 2px 16px 0 rgba(80,36,255,0.04) inset;
+}
+
+/* Responsive tweaks for mobile */
+@media (max-width: 640px) {
+  .zoom-container {
+    border-radius: 0.75rem;
+  }
+  .zoom-image {
+    cursor: default;
+  }
+  .bg-white\/80 {
+    padding: 1.25rem !important;
+  }
+}
+
+.product-description-section {
+  background: linear-gradient(90deg, #f3f4f6 60%, #faf5ff 100%);
+  border: 1.5px solid #ede9fe;
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 12px 0 rgba(124,58,237,0.06);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  transition: box-shadow 0.2s;
+}
+.product-description-section:hover {
+  box-shadow: 0 4px 24px 0 rgba(124,58,237,0.10);
+}
+
+@media (max-width: 640px) {
+  .product-description-section {
+    padding: 1.25rem 0.75rem;
+    margin: 1.25rem 0;
+  }
+}
+
+.price-discount-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  background: linear-gradient(90deg, #f3f4f6 60%, #faf5ff 100%);
+  border-radius: 1.5rem;
+  padding: 1.1rem 2.2rem 1.1rem 1.5rem;
+  box-shadow: 0 2px 12px 0 rgba(124,58,237,0.06);
+  position: relative;
+}
+.discount-badge {
+  background: linear-gradient(90deg, #e11d48 0%, #7c3aed 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.4rem 1.1rem;
+  border-radius: 9999px;
+  margin-right: 0.7rem;
+  box-shadow: 0 2px 8px 0 rgba(225,29,72,0.10);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  animation: popIn 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.old-price {
+  font-size: 1.25rem;
+  color: #a1a1aa;
+  text-decoration: line-through;
+  font-weight: 500;
+  margin-right: 0.7rem;
+}
+.new-price {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #7c3aed;
+  text-shadow: 0 2px 8px rgba(124,58,237,0.10);
+  letter-spacing: -0.01em;
+  animation: pricePulse 1.1s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes pricePulse {
+  0% { color: #ede9fe; transform: scale(1.12); }
+  60% { color: #a78bfa; transform: scale(0.98); }
+  100% { color: #7c3aed; transform: scale(1); }
+}
+
+@media (max-width: 640px) {
+  .price-discount-group {
+    padding: 0.7rem 1rem 0.7rem 0.7rem;
+    gap: 0.7rem;
+  }
+  .discount-badge {
+    font-size: 1rem;
+    padding: 0.3rem 0.8rem;
+  }
+  .old-price {
+    font-size: 1rem;
+  }
+  .new-price {
+    font-size: 1.5rem;
+  }
+}
+
+.old-price-barred {
+  font-size: 1.3rem;
+  color: #6b7280; /* neutral gray */
+  text-decoration: line-through;
+  font-weight: 500;
+  margin-right: 0.7rem;
+  opacity: 0.8;
+  letter-spacing: 0.01em;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .old-price-barred {
+    font-size: 1.05rem;
+    margin-right: 0.4rem;
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+  }
+} 

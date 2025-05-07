@@ -1,0 +1,350 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "search": "Rechercher",
+    "sortBy": "Trier par",
+    "resetFilters": "Réinitialiser les filtres",
+    "continueShopping": "Continuer les achats",
+    "proceedToCheckout": "Passer à la caisse",
+    "copyright": "© {{year}} QuickCart. Tous droits réservés.",
+    "appName": "Quick Cart Breeze",
+    "home": "Accueil",
+    "categories": "Catégories",
+    "language": "Langue",
+    "languages": {
+      "en": "Anglais",
+      "fr": "Français",
+      "ar": "Arabe"
+    },
+    "addToCart": "Ajouter au panier",
+    "instantlyPurchase": "Acheter instantanément",
+    "filters": "Filtres",
+    "all": "Tous",
+    "male": "Homme",
+    "female": "Femme",
+    "unisex": "Unisexe",
+    "gender": "Genre",
+    "size": "Taille",
+    "material": "Matière",
+    "brand": "Marque",
+    "priceRange": "Fourchette de prix",
+    "availability": "Disponibilité",
+    "inStock": "En stock",
+    "onSale": "En promotion"
+  },
+  "home": {
+    "featuredProducts": "Produits en vedette",
+    "bestSellers": "Meilleures ventes",
+    "bestSellersSubtitle": "Découvrez nos produits les plus populaires, appréciés par les clients du monde entier",
+    "newArrivals": "Nouveautés",
+    "newArrivalsSubtitle": "Découvrez nos dernières arrivées et restez à la pointe des tendances avec notre nouvelle collection",
+    "noProductsFound": "Aucun produit ne correspond à vos critères de recherche.",
+    "noProductsAvailable": "Aucun produit disponible",
+    "loadingProducts": "Chargement des produits...",
+    "sortOptions": {
+      "nameAsc": "Nom (A-Z)",
+      "nameDesc": "Nom (Z-A)",
+      "priceAsc": "Prix (bas à élevé)",
+      "priceDesc": "Prix (élevé à bas)"
+    },
+    "actions": {
+      "viewDetails": "Voir les détails",
+      "viewProduct": "Voir le produit",
+      "addToCart": "Ajouter au panier"
+    }
+  },
+  "cart": {
+    "title": "Panier",
+    "emptyCart": {
+      "title": "Votre panier est vide",
+      "message": "Il semble que vous n'ayez pas encore ajouté de produits à votre panier."
+    },
+    "product": "Produit",
+    "price": "Prix",
+    "quantity": "Quantité",
+    "total": "Total",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "free": "Gratuit",
+    "clearCart": "Vider le panier",
+    "orderSummary": "Récapitulatif de la commande",
+    "size": "Taille",
+    "material": "Matière",
+    "color": "Couleur",
+    "lowStock": "Plus que {{count}} en stock",
+    "outOfStock": "Rupture de stock",
+    "success": {
+      "itemAdded": "Article ajouté au panier",
+      "itemRemoved": "Article supprimé du panier",
+      "quantityUpdated": "Quantité mise à jour",
+      "cleared": "Panier vidé"
+    },
+    "errors": {
+      "fetchFailed": "Échec du chargement des articles du panier"
+    }
+  },
+  "admin": {
+    "login": "Connexion Admin",
+    "dashboard": {
+      "title": "Tableau de Bord",
+      "welcome": "Bienvenue, Admin",
+      "stats": {
+        "totalProducts": "Total des Produits",
+        "totalCategories": "Total des Catégories",
+        "pendingOrders": "Commandes en Attente",
+        "totalRevenue": "Revenu Total",
+        "itemsInStock": "articles en stock",
+        "activeCategories": "catégories actives",
+        "ordersToProcess": "commandes à traiter",
+        "profitMargin": "marge bénéficiaire"
+      },
+      "recentOrders": {
+        "title": "Commandes Récentes",
+        "noOrders": "Aucune commande",
+        "viewDetails": "Voir les Détails",
+        "delete": "Supprimer",
+        "status": {
+          "pending": "En Attente",
+          "processing": "En Cours",
+          "delivered": "Livré",
+          "completed": "Terminé",
+          "cancelled": "Annulé"
+        }
+      },
+      "bestSellers": {
+        "title": "Meilleures Ventes",
+        "noData": "Aucune donnée de vente disponible",
+        "unitsSold": "Unités Vendues",
+        "revenue": "Revenu"
+      }
+    },
+    "products": {
+      "title": "Produits",
+      "addNew": "Ajouter un Produit",
+      "search": "Rechercher des produits...",
+      "noProducts": "Aucun produit ne correspond à votre recherche.",
+      "table": {
+        "product": "Produit",
+        "category": "Catégorie",
+        "costPrice": "Prix de Revient",
+        "sellingPrice": "Prix de Vente",
+        "profitMargin": "Marge Bénéficiaire",
+        "discount": "Réduction",
+        "actions": "Actions"
+      },
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+    },
+    "categories": {
+      "title": "Catégories",
+      "addNew": "Ajouter une Catégorie",
+      "noCategories": "Aucune catégorie trouvée. Créez votre première catégorie.",
+      "table": {
+        "name": "Nom",
+        "productCount": "Nombre de Produits",
+        "actions": "Actions"
+      },
+      "addDialog": {
+        "title": "Ajouter une Nouvelle Catégorie",
+        "nameEn": "Nom (Anglais)",
+        "nameFr": "Nom (Français)",
+        "nameAr": "Nom (Arabe)",
+        "cancel": "Annuler",
+        "add": "Ajouter la Catégorie"
+      },
+      "editDialog": {
+        "title": "Modifier la Catégorie",
+        "save": "Enregistrer les Modifications"
+      },
+      "deleteDialog": {
+        "title": "Supprimer la Catégorie",
+        "confirm": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
+        "warning": "Cette action ne peut pas être annulée.",
+        "delete": "Supprimer la Catégorie"
+      }
+    },
+    "orders": {
+      "title": "Commandes",
+      "search": "Rechercher par client, téléphone ou adresse...",
+      "status": {
+        "all": "Tous les Statuts",
+        "pending": "En Attente",
+        "processing": "En Cours",
+        "delivered": "Livré",
+        "completed": "Terminé",
+        "cancelled": "Annulé"
+      },
+      "table": {
+        "customer": "Client",
+        "date": "Date",
+        "total": "Total",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "noOrders": "Aucune commande ne correspond à votre recherche.",
+      "viewDialog": {
+        "title": "Détails de la Commande",
+        "customerInfo": "Informations Client",
+        "orderInfo": "Informations Commande",
+        "orderItems": "Articles Commandés",
+        "name": "Nom",
+        "phone": "Téléphone",
+        "altPhone": "Tél. Alternatif",
+        "address": "Adresse",
+        "governorate": "Gouvernorat",
+        "delegation": "Délégation",
+        "zipCode": "Code Postal",
+        "orderId": "ID Commande",
+        "date": "Date",
+        "totalAmount": "Montant Total",
+        "product": "Produit",
+        "variant": "Variante",
+        "price": "Prix",
+        "quantity": "Quantité",
+        "total": "Total",
+        "size": "Taille",
+        "color": "Couleur",
+        "off": "de réduction"
+      },
+      "actions": {
+        "markProcessing": "Marquer comme En Cours",
+        "markCompleted": "Marquer comme Terminé",
+        "cancelOrder": "Annuler la Commande",
+        "updating": "Mise à jour..."
+      },
+      "deleteDialog": {
+        "title": "Supprimer la Commande",
+        "confirm": "Êtes-vous sûr de vouloir supprimer cette commande ?",
+        "warning": "Cette action ne peut pas être annulée.",
+        "deleting": "Suppression...",
+        "delete": "Supprimer la Commande"
+      }
+    },
+    "settings": {
+      "title": "Paramètres",
+      "deliveryRules": {
+        "title": "Règles de Coût de Livraison",
+        "enableRules": "Activer les Règles de Coût de Livraison",
+        "minOrderAmount": {
+          "label": "Montant Minimum de Commande pour Livraison Gratuite (€)",
+          "description": "Les commandes au-dessus de ce montant auront la livraison gratuite"
+        },
+        "deliveryCost": {
+          "label": "Coût Standard de Livraison (€)",
+          "description": "Coût de livraison pour les commandes en dessous du montant minimum"
+        }
+      },
+      "storeLogo": {
+        "title": "Logo du Magasin",
+        "uploadText": "Cliquez ou glissez une image ici pour télécharger votre logo",
+        "uploading": "Téléchargement en cours...",
+        "width": "Largeur du Logo (px)",
+        "height": "Hauteur du Logo (px)",
+        "description": "Téléchargez un logo pour votre magasin. Recommandé : PNG ou SVG carré, max 1MB."
+      },
+      "saveButton": "Enregistrer les Paramètres",
+      "savingButton": "Enregistrement...",
+      "success": "Paramètres mis à jour avec succès",
+      "error": "Échec de la mise à jour des paramètres",
+      "logoSuccess": "Logo téléchargé avec succès !",
+      "logoError": "Échec du téléchargement du logo"
+    },
+    "role": "Administrateur",
+    "newProduct": "Nouveau produit",
+    "editProduct": "Modifier le produit",
+    "database": {
+      "title": "Utilisation de la Base de Données & Limites du Plan",
+      "storage": {
+        "title": "Utilisation du Stockage",
+        "used": "Utilisé",
+        "limit": "Limite"
+      },
+      "index": {
+        "title": "Utilisation des Index",
+        "used": "Utilisé",
+        "limit": "Limite"
+      },
+      "connections": {
+        "title": "Utilisation des Connexions",
+        "active": "Actif",
+        "limit": "Limite"
+      },
+      "tables": {
+        "title": "Utilisation des Tables",
+        "used": "Utilisé",
+        "limit": "Limite"
+      },
+      "loading": "Chargement des statistiques de la base de données..."
+    },
+    "logout": "Déconnexion"
+  },
+  "errors": {
+    "notFound": "Page non trouvée",
+    "notFoundMessage": "La page que vous recherchez n'existe pas ou a été déplacée."
+  },
+  "product": {
+    "relatedProducts": "Produits associés",
+    "variants": {
+      "title": "Variantes du Produit",
+      "size": "Taille",
+      "color": "Couleur",
+      "stock": "Stock",
+      "inStock": "En Stock",
+      "outOfStock": "Rupture de Stock",
+      "selectVariant": "Veuillez sélectionner une variante"
+    },
+    "success": {
+      "addedToCart": "Produit ajouté au panier !"
+    },
+    "errors": {
+      "addToCartFailed": "Échec de l'ajout du produit au panier. Veuillez réessayer plus tard."
+    }
+  },
+  "checkout": {
+    "title": "Paiement",
+    "deliveryInfo": "Informations de livraison",
+    "fullName": "Nom complet",
+    "fullNamePlaceholder": "Entrez votre nom complet",
+    "phoneNumber": "Numéro de téléphone",
+    "alternatePhone": "Téléphone alternatif (optionnel)",
+    "alternatePhonePlaceholder": "Entrez un numéro de téléphone alternatif",
+    "deliveryAddress": "Adresse de livraison",
+    "deliveryAddressPlaceholder": "Entrez votre adresse de livraison complète exemple : Chez Cafe ElNour/Chez Hopital...",
+    "governorate": "Gouvernorat (État)",
+    "selectGovernorate": "Sélectionnez un gouvernorat",
+    "delegation": "Délégation (Sous-État)",
+    "selectDelegation": "Sélectionnez une délégation",
+    "selectGovernorateFirst": "Sélectionnez d'abord un gouvernorat",
+    "zipCode": "Code postal",
+    "zipCodePlaceholder": "Entrez votre code postal",
+    "placeOrder": "Passer la commande",
+    "processing": "Traitement...",
+    "qty": "Qté",
+    "paymentMethod": "Mode de paiement",
+    "cashOnDelivery": "Paiement à la livraison",
+    "success": {
+      "orderPlaced": "Commande passée avec succès ! Merci pour votre achat."
+    },
+    "errors": {
+      "emptyCart": "Votre panier est vide !",
+      "orderFailed": "Échec de la commande. Veuillez réessayer plus tard."
+    },
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "Entrez votre adresse e-mail"
+  },
+  "orderSuccess": {
+    "title": "Commande passée avec succès !",
+    "message": "Merci pour votre achat. Votre commande a été reçue et sera traitée sous peu.\nVous serez contacté pour confirmation avant l'expédition.",
+    "continueShopping": "Continuer les achats"
+  },
+  "attributes": {
+    "gender": "Genre",
+    "material": "Matière",
+    "brand": "Marque",
+    "size": "Taille",
+    "color": "Couleur",
+    "stock": "Stock",
+    "inStock": "En Stock",
+    "outOfStock": "Rupture de Stock",
+    "sku": "Référence"
+  }
+} 

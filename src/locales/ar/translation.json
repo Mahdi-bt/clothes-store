@@ -1,0 +1,350 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "search": "بحث",
+    "sortBy": "ترتيب حسب",
+    "resetFilters": "إعادة تعيين الفلاتر",
+    "continueShopping": "متابعة التسوق",
+    "proceedToCheckout": "المتابعة إلى الدفع",
+    "copyright": "© {{year}} QuickCart. جميع الحقوق محفوظة.",
+    "appName": "Quick Cart Breeze",
+    "home": "الرئيسية",
+    "categories": "التصنيفات",
+    "language": "اللغة",
+    "languages": {
+      "en": "الإنجليزية",
+      "fr": "الفرنسية",
+      "ar": "العربية"
+    },
+    "addToCart": "إضافة إلى السلة",
+    "instantlyPurchase": "شراء فوري",
+    "filters": "الفلاتر",
+    "all": "الكل",
+    "male": "رجالي",
+    "female": "نسائي",
+    "unisex": "عام",
+    "gender": "الجنس",
+    "size": "المقاس",
+    "material": "المادة",
+    "brand": "العلامة التجارية",
+    "priceRange": "نطاق السعر",
+    "availability": "التوفر",
+    "inStock": "متوفر",
+    "onSale": "على العرض"
+  },
+  "home": {
+    "featuredProducts": "المنتجات المميزة",
+    "bestSellers": "الأكثر مبيعاً",
+    "bestSellersSubtitle": "اكتشف منتجاتنا الأكثر شعبية، يحبها العملاء في جميع أنحاء العالم",
+    "newArrivals": "وصل حديثاً",
+    "newArrivalsSubtitle": "اكتشف أحدث وصولاتنا وابقَ في طليعة الموضة مع مجموعتنا الجديدة",
+    "noProductsFound": "لم يتم العثور على منتجات تطابق معايير البحث الخاصة بك.",
+    "noProductsAvailable": "لا توجد منتجات متاحة",
+    "loadingProducts": "جاري تحميل المنتجات...",
+    "sortOptions": {
+      "nameAsc": "الاسم (أ-ي)",
+      "nameDesc": "الاسم (ي-أ)",
+      "priceAsc": "السعر (من الأقل إلى الأعلى)",
+      "priceDesc": "السعر (من الأعلى إلى الأقل)"
+    },
+    "actions": {
+      "viewDetails": "عرض التفاصيل",
+      "viewProduct": "عرض المنتج",
+      "addToCart": "إضافة إلى السلة"
+    }
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "emptyCart": {
+      "title": "سلة التسوق فارغة",
+      "message": "يبدو أنك لم تقم بإضافة أي منتجات إلى سلة التسوق الخاصة بك بعد."
+    },
+    "product": "المنتج",
+    "price": "السعر",
+    "quantity": "الكمية",
+    "total": "المجموع",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "free": "مجاني",
+    "clearCart": "إفراغ السلة",
+    "orderSummary": "ملخص الطلب",
+    "size": "المقاس",
+    "material": "المادة",
+    "color": "اللون",
+    "lowStock": "باقي {{count}} فقط في المخزون",
+    "outOfStock": "غير متوفر",
+    "success": {
+      "itemAdded": "تمت إضافة المنتج إلى السلة",
+      "itemRemoved": "تم حذف المنتج من السلة",
+      "quantityUpdated": "تم تحديث الكمية",
+      "cleared": "تم تفريغ السلة"
+    },
+    "errors": {
+      "fetchFailed": "فشل في تحميل عناصر السلة"
+    }
+  },
+  "admin": {
+    "login": "تسجيل دخول المشرف",
+    "dashboard": {
+      "title": "لوحة التحكم",
+      "welcome": "مرحباً بعودتك، المدير",
+      "stats": {
+        "totalProducts": "إجمالي المنتجات",
+        "totalCategories": "إجمالي الفئات",
+        "pendingOrders": "الطلبات المعلقة",
+        "totalRevenue": "إجمالي الإيرادات",
+        "itemsInStock": "عنصر في المخزون",
+        "activeCategories": "فئة نشطة",
+        "ordersToProcess": "طلب للمعالجة",
+        "profitMargin": "هامش الربح"
+      },
+      "recentOrders": {
+        "title": "الطلبات الأخيرة",
+        "noOrders": "لا توجد طلبات",
+        "viewDetails": "عرض التفاصيل",
+        "delete": "حذف",
+        "status": {
+          "pending": "معلق",
+          "processing": "قيد المعالجة",
+          "delivered": "تم التوصيل",
+          "completed": "مكتمل",
+          "cancelled": "ملغي"
+        }
+      },
+      "bestSellers": {
+        "title": "الأكثر مبيعاً",
+        "noData": "لا توجد بيانات مبيعات متاحة",
+        "unitsSold": "الوحدات المباعة",
+        "revenue": "الإيرادات"
+      }
+    },
+    "products": {
+      "title": "المنتجات",
+      "addNew": "إضافة منتج جديد",
+      "search": "البحث عن منتجات...",
+      "noProducts": "لم يتم العثور على منتجات تطابق بحثك.",
+      "table": {
+        "product": "المنتج",
+        "category": "الفئة",
+        "costPrice": "سعر التكلفة",
+        "sellingPrice": "سعر البيع",
+        "profitMargin": "هامش الربح",
+        "discount": "الخصم",
+        "actions": "الإجراءات"
+      },
+      "deleteConfirm": "هل أنت متأكد من حذف هذا المنتج؟"
+    },
+    "categories": {
+      "title": "الفئات",
+      "addNew": "إضافة فئة",
+      "noCategories": "لم يتم العثور على فئات. قم بإنشاء فئتك الأولى.",
+      "table": {
+        "name": "الاسم",
+        "productCount": "عدد المنتجات",
+        "actions": "الإجراءات"
+      },
+      "addDialog": {
+        "title": "إضافة فئة جديدة",
+        "nameEn": "الاسم (الإنجليزية)",
+        "nameFr": "الاسم (الفرنسية)",
+        "nameAr": "الاسم (العربية)",
+        "cancel": "إلغاء",
+        "add": "إضافة الفئة"
+      },
+      "editDialog": {
+        "title": "تعديل الفئة",
+        "save": "حفظ التغييرات"
+      },
+      "deleteDialog": {
+        "title": "حذف الفئة",
+        "confirm": "هل أنت متأكد من حذف هذه الفئة؟",
+        "warning": "لا يمكن التراجع عن هذا الإجراء.",
+        "delete": "حذف الفئة"
+      }
+    },
+    "orders": {
+      "title": "الطلبات",
+      "search": "البحث حسب العميل أو الهاتف أو العنوان...",
+      "status": {
+        "all": "جميع الحالات",
+        "pending": "معلق",
+        "processing": "قيد المعالجة",
+        "delivered": "تم التوصيل",
+        "completed": "مكتمل",
+        "cancelled": "ملغي"
+      },
+      "table": {
+        "customer": "العميل",
+        "date": "التاريخ",
+        "total": "المجموع",
+        "status": "الحالة",
+        "actions": "الإجراءات"
+      },
+      "noOrders": "لم يتم العثور على طلبات تطابق بحثك.",
+      "viewDialog": {
+        "title": "تفاصيل الطلب",
+        "customerInfo": "معلومات العميل",
+        "orderInfo": "معلومات الطلب",
+        "orderItems": "عناصر الطلب",
+        "name": "الاسم",
+        "phone": "الهاتف",
+        "altPhone": "هاتف بديل",
+        "address": "العنوان",
+        "governorate": "الولاية",
+        "delegation": "المعتمدية",
+        "zipCode": "الرمز البريدي",
+        "orderId": "رقم الطلب",
+        "date": "التاريخ",
+        "totalAmount": "المبلغ الإجمالي",
+        "product": "المنتج",
+        "variant": "المتغير",
+        "price": "السعر",
+        "quantity": "الكمية",
+        "total": "المجموع",
+        "size": "المقاس",
+        "color": "اللون",
+        "off": "خصم"
+      },
+      "actions": {
+        "markProcessing": "وضع قيد المعالجة",
+        "markCompleted": "وضع مكتمل",
+        "cancelOrder": "إلغاء الطلب",
+        "updating": "جاري التحديث..."
+      },
+      "deleteDialog": {
+        "title": "حذف الطلب",
+        "confirm": "هل أنت متأكد من حذف هذا الطلب؟",
+        "warning": "لا يمكن التراجع عن هذا الإجراء.",
+        "deleting": "جاري الحذف...",
+        "delete": "حذف الطلب"
+      }
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "deliveryRules": {
+        "title": "قواعد تكلفة التوصيل",
+        "enableRules": "تفعيل قواعد تكلفة التوصيل",
+        "minOrderAmount": {
+          "label": "الحد الأدنى للطلب للتوصيل المجاني ($)",
+          "description": "الطلبات التي تتجاوز هذا المبلغ ستكون مجانية التوصيل"
+        },
+        "deliveryCost": {
+          "label": "تكلفة التوصيل القياسية ($)",
+          "description": "تكلفة التوصيل للطلبات أقل من الحد الأدنى"
+        }
+      },
+      "storeLogo": {
+        "title": "شعار المتجر",
+        "uploadText": "انقر أو اسحب صورة هنا لتحميل شعارك",
+        "uploading": "جاري التحميل...",
+        "width": "عرض الشعار (بكسل)",
+        "height": "ارتفاع الشعار (بكسل)",
+        "description": "قم بتحميل شعار لمتجرك. الموصى به: PNG أو SVG مربع، الحد الأقصى 1 ميجابايت."
+      },
+      "saveButton": "حفظ الإعدادات",
+      "savingButton": "جاري الحفظ...",
+      "success": "تم تحديث الإعدادات بنجاح",
+      "error": "فشل تحديث الإعدادات",
+      "logoSuccess": "تم تحميل الشعار بنجاح!",
+      "logoError": "فشل تحميل الشعار"
+    },
+    "role": "مشرف",
+    "newProduct": "منتج جديد",
+    "editProduct": "تعديل المنتج",
+    "logout": "تسجيل الخروج",
+    "database": {
+      "title": "استخدام قاعدة البيانات وحدود الخطة",
+      "storage": {
+        "title": "استخدام التخزين",
+        "used": "المستخدم",
+        "limit": "الحد الأقصى"
+      },
+      "index": {
+        "title": "استخدام الفهارس",
+        "used": "المستخدم",
+        "limit": "الحد الأقصى"
+      },
+      "connections": {
+        "title": "استخدام الاتصالات",
+        "active": "نشط",
+        "limit": "الحد الأقصى"
+      },
+      "tables": {
+        "title": "استخدام الجداول",
+        "used": "المستخدم",
+        "limit": "الحد الأقصى"
+      },
+      "loading": "جاري تحميل إحصائيات قاعدة البيانات..."
+    }
+  },
+  "errors": {
+    "notFound": "الصفحة غير موجودة",
+    "notFoundMessage": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
+  },
+  "product": {
+    "relatedProducts": "منتجات ذات صلة",
+    "variants": {
+      "title": "متغيرات المنتج",
+      "size": "المقاس",
+      "color": "اللون",
+      "stock": "المخزون",
+      "inStock": "متوفر",
+      "outOfStock": "غير متوفر",
+      "selectVariant": "الرجاء اختيار متغير"
+    },
+    "success": {
+      "addedToCart": "تمت إضافة المنتج إلى السلة!"
+    },
+    "errors": {
+      "addToCartFailed": "فشل في إضافة المنتج إلى السلة. يرجى المحاولة مرة أخرى لاحقًا."
+    }
+  },
+  "checkout": {
+    "title": "إستكمال الطلبية",
+    "deliveryInfo": "معلومات التوصيل",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "أدخل اسمك الكامل",
+    "phoneNumber": "رقم الهاتف",
+    "alternatePhone": "هاتف بديل (اختياري)",
+    "alternatePhonePlaceholder": "أدخل رقم هاتف بديل",
+    "deliveryAddress": "عنوان التوصيل",
+    "deliveryAddressPlaceholder": "أدخل عنوان التوصيل الكامل مثال: قرب مقهى النور/قرب المستشفى...",
+    "governorate": "الولاية (المحافظة)",
+    "selectGovernorate": "اختر ولاية",
+    "delegation": "المعتمدية (المنطقة الفرعية)",
+    "selectDelegation": "اختر معتمدية",
+    "selectGovernorateFirst": "اختر ولاية أولاً",
+    "zipCode": "الرمز البريدي",
+    "zipCodePlaceholder": "أدخل الرمز البريدي",
+    "placeOrder": "تأكيد الطلب",
+    "processing": "جاري المعالجة...",
+    "qty": "الكمية",
+    "paymentMethod": "طريقة الدفع",
+    "cashOnDelivery": "الدفع عند الاستلام",
+    "success": {
+      "orderPlaced": "تم إرسال الطلب بنجاح! شكرًا لثقتك بنا."
+    },
+    "errors": {
+      "emptyCart": "سلة التسوق فارغة!",
+      "orderFailed": "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى لاحقًا."
+    },
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل عنوان بريدك الإلكتروني"
+  },
+  "orderSuccess": {
+    "title": "تم إرسال الطلب بنجاح!",
+    "message": "شكرًا لثقتك بنا. تم استلام طلبك وسيتم معالجته قريبًا.\nسوف يتم الاتصال بك للتأكيد قبل إرسال الطلب ",
+    "continueShopping": "متابعة التسوق"
+  },
+  "attributes": {
+    "gender": "الجنس",
+    "material": "المادة",
+    "brand": "العلامة التجارية",
+    "size": "المقاس",
+    "color": "اللون",
+    "stock": "المخزون",
+    "inStock": "متوفر",
+    "outOfStock": "غير متوفر",
+    "sku": "رمز المنتج"
+  }
+} 

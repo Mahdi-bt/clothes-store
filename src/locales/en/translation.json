@@ -1,0 +1,350 @@
+{
+  "common": {
+    "home": "Home",
+    "categories": "Categories",
+    "loading": "Loading...",
+    "search": "Search",
+    "sortBy": "Sort by",
+    "resetFilters": "Reset Filters",
+    "continueShopping": "Continue Shopping",
+    "proceedToCheckout": "Proceed to Checkout",
+    "copyright": "© {{year}} QuickCart. All rights reserved.",
+    "appName": "Quick Cart Breeze",
+    "language": "Language",
+    "languages": {
+      "en": "English",
+      "fr": "French",
+      "ar": "Arabic"
+    },
+    "addToCart": "Add to Cart",
+    "instantlyPurchase": "Instantly Purchase",
+    "filters": "Filters",
+    "all": "All",
+    "male": "Male",
+    "female": "Female",
+    "unisex": "Unisex",
+    "gender": "Gender",
+    "size": "Size",
+    "material": "Material",
+    "brand": "Brand",
+    "priceRange": "Price Range",
+    "availability": "Availability",
+    "inStock": "In Stock",
+    "onSale": "On Sale"
+  },
+  "home": {
+    "featuredProducts": "Featured Products",
+    "bestSellers": "Best Sellers",
+    "bestSellersSubtitle": "Discover our most popular products, loved by customers worldwide",
+    "newArrivals": "New Arrivals",
+    "newArrivalsSubtitle": "Discover our newest arrivals and stay ahead of the trends with our latest collection",
+    "noProductsFound": "No products found matching your search criteria.",
+    "noProductsAvailable": "No products available",
+    "loadingProducts": "Loading products...",
+    "sortOptions": {
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)",
+      "priceAsc": "Price (Low to High)",
+      "priceDesc": "Price (High to Low)"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "viewProduct": "View Product",
+      "addToCart": "Add to Cart"
+    }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "emptyCart": {
+      "title": "Your Cart is Empty",
+      "message": "Looks like you haven't added any products to your cart yet."
+    },
+    "product": "Product",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "clearCart": "Clear Cart",
+    "orderSummary": "Order Summary",
+    "size": "Size",
+    "material": "Material",
+    "color": "Color",
+    "lowStock": "Only {{count}} left in stock",
+    "outOfStock": "Out of Stock",
+    "success": {
+      "itemAdded": "Item added to cart",
+      "itemRemoved": "Item removed from cart",
+      "quantityUpdated": "Quantity updated",
+      "cleared": "Cart cleared"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch cart items"
+    }
+  },
+  "admin": {
+    "login": "Admin Login",
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome back, Admin",
+      "stats": {
+        "totalProducts": "Total Products",
+        "totalCategories": "Total Categories",
+        "pendingOrders": "Pending Orders",
+        "totalRevenue": "Total Revenue",
+        "itemsInStock": "items in stock",
+        "activeCategories": "active categories",
+        "ordersToProcess": "orders to process",
+        "profitMargin": "profit margin"
+      },
+      "recentOrders": {
+        "title": "Recent Orders",
+        "noOrders": "No orders yet",
+        "viewDetails": "View Details",
+        "delete": "Delete",
+        "status": {
+          "pending": "Pending",
+          "processing": "Processing",
+          "delivered": "Delivered",
+          "completed": "Completed",
+          "cancelled": "Cancelled"
+        }
+      },
+      "bestSellers": {
+        "title": "Best Selling Products",
+        "noData": "No sales data available",
+        "unitsSold": "Units Sold",
+        "revenue": "Revenue"
+      }
+    },
+    "products": {
+      "title": "Products",
+      "addNew": "Add New Product",
+      "search": "Search products...",
+      "noProducts": "No products found matching your search.",
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "costPrice": "Cost Price",
+        "sellingPrice": "Selling Price",
+        "profitMargin": "Profit Margin",
+        "discount": "Discount",
+        "actions": "Actions"
+      },
+      "deleteConfirm": "Are you sure you want to delete this product?"
+    },
+    "categories": {
+      "title": "Categories",
+      "addNew": "Add Category",
+      "noCategories": "No categories found. Create your first category.",
+      "table": {
+        "name": "Name",
+        "productCount": "Product Count",
+        "actions": "Actions"
+      },
+      "addDialog": {
+        "title": "Add New Category",
+        "nameEn": "Name (English)",
+        "nameFr": "Name (French)",
+        "nameAr": "Name (Arabic)",
+        "cancel": "Cancel",
+        "add": "Add Category"
+      },
+      "editDialog": {
+        "title": "Edit Category",
+        "save": "Save Changes"
+      },
+      "deleteDialog": {
+        "title": "Delete Category",
+        "confirm": "Are you sure you want to delete this category?",
+        "warning": "This action cannot be undone.",
+        "delete": "Delete Category"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "search": "Search by customer, phone, or address...",
+      "status": {
+        "all": "All Status",
+        "pending": "Pending",
+        "processing": "Processing",
+        "delivered": "Delivered",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "table": {
+        "customer": "Customer",
+        "date": "Date",
+        "total": "Total",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "noOrders": "No orders found matching your search.",
+      "viewDialog": {
+        "title": "Order Details",
+        "customerInfo": "Customer Information",
+        "orderInfo": "Order Information",
+        "orderItems": "Order Items",
+        "name": "Name",
+        "phone": "Phone",
+        "altPhone": "Alt. Phone",
+        "address": "Address",
+        "governorate": "Governorate",
+        "delegation": "Delegation",
+        "zipCode": "Zip Code",
+        "orderId": "Order ID",
+        "date": "Date",
+        "totalAmount": "Total Amount",
+        "product": "Product",
+        "variant": "Variant",
+        "price": "Price",
+        "quantity": "Quantity",
+        "total": "Total",
+        "size": "Size",
+        "color": "Color",
+        "off": "off"
+      },
+      "actions": {
+        "markProcessing": "Mark as Processing",
+        "markCompleted": "Mark as Completed",
+        "cancelOrder": "Cancel Order",
+        "updating": "Updating..."
+      },
+      "deleteDialog": {
+        "title": "Delete Order",
+        "confirm": "Are you sure you want to delete this order?",
+        "warning": "This action cannot be undone.",
+        "deleting": "Deleting...",
+        "delete": "Delete Order"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "deliveryRules": {
+        "title": "Delivery Cost Rules",
+        "enableRules": "Enable Delivery Cost Rules",
+        "minOrderAmount": {
+          "label": "Minimum Order Amount for Free Delivery ($)",
+          "description": "Orders above this amount will have free delivery"
+        },
+        "deliveryCost": {
+          "label": "Standard Delivery Cost ($)",
+          "description": "Delivery cost for orders below minimum amount"
+        }
+      },
+      "storeLogo": {
+        "title": "Store Logo",
+        "uploadText": "Click or drag an image here to upload your logo",
+        "uploading": "Uploading...",
+        "width": "Logo Width (px)",
+        "height": "Logo Height (px)",
+        "description": "Upload a logo for your store. Recommended: square PNG or SVG, max 1MB."
+      },
+      "saveButton": "Save Settings",
+      "savingButton": "Saving...",
+      "success": "Settings updated successfully",
+      "error": "Failed to update settings",
+      "logoSuccess": "Logo uploaded successfully!",
+      "logoError": "Logo upload failed"
+    },
+    "role": "Administrator",
+    "newProduct": "New Product",
+    "editProduct": "Edit Product",
+    "database": {
+      "title": "Database Usage & Plan Limits",
+      "storage": {
+        "title": "Storage Usage",
+        "used": "Used",
+        "limit": "Limit"
+      },
+      "index": {
+        "title": "Index Usage",
+        "used": "Used",
+        "limit": "Limit"
+      },
+      "connections": {
+        "title": "Connection Usage",
+        "active": "Active",
+        "limit": "Limit"
+      },
+      "tables": {
+        "title": "Table Usage",
+        "used": "Used",
+        "limit": "Limit"
+      },
+      "loading": "Loading database stats..."
+    },
+    "logout": "Logout"
+  },
+  "errors": {
+    "notFound": "Page Not Found",
+    "notFoundMessage": "The page you're looking for doesn't exist or has been moved."
+  },
+  "product": {
+    "relatedProducts": "Related Products",
+    "variants": {
+      "title": "Product Variants",
+      "size": "Size",
+      "color": "Color",
+      "stock": "Stock",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "selectVariant": "Please select a variant"
+    },
+    "success": {
+      "addedToCart": "Product added to cart!"
+    },
+    "errors": {
+      "addToCartFailed": "Failed to add product to cart. Please try again later."
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "deliveryInfo": "Delivery Information",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "phoneNumber": "Phone Number",
+    "alternatePhone": "Alternate Phone (Optional)",
+    "alternatePhonePlaceholder": "Enter alternate phone number",
+    "deliveryAddress": "Delivery Address",
+    "deliveryAddressPlaceholder": "Enter your complete delivery address example: Chez Cafe ElNour/Chez Hopital...",
+    "governorate": "Governorate (State)",
+    "selectGovernorate": "Select a governorate",
+    "delegation": "Delegation (Sub-State)",
+    "selectDelegation": "Select a delegation",
+    "selectGovernorateFirst": "Select a governorate first",
+    "zipCode": "Zip Code",
+    "zipCodePlaceholder": "Enter your zip code",
+    "placeOrder": "Place Order",
+    "processing": "Processing...",
+    "qty": "Qty",
+    "paymentMethod": "Payment Method",
+    "cashOnDelivery": "Cash on Delivery",
+    "success": {
+      "orderPlaced": "Order placed successfully! Thank you for your purchase."
+    },
+    "errors": {
+      "emptyCart": "Your cart is empty!",
+      "orderFailed": "Failed to place order. Please try again later."
+    },
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email address"
+  },
+  "orderSuccess": {
+    "title": "Order Placed Successfully!",
+    "message": "Thank you for your purchase. Your order has been received and will be processed shortly.\nYou will be contacted for confirmation before shipping.",
+    "continueShopping": "Continue Shopping"
+  },
+  "attributes": {
+    "gender": "Gender",
+    "material": "Material",
+    "brand": "Brand",
+    "size": "Size",
+    "color": "Color",
+    "stock": "Stock",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "sku": "SKU"
+  }
+} 
