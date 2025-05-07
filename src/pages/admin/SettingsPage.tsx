@@ -17,6 +17,12 @@ interface DeliverySettings {
   logo_url?: string;
   logo_height?: number;
   logo_width?: number;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_address?: string;
+  store_description_en?: string;
+  store_description_fr?: string;
+  store_description_ar?: string;
 }
 
 const SettingsPage = () => {
@@ -32,6 +38,12 @@ const SettingsPage = () => {
     logo_url: '',
     logo_height: 100,
     logo_width: 100,
+    contact_email: '',
+    contact_phone: '',
+    contact_address: '',
+    store_description_en: '',
+    store_description_fr: '',
+    store_description_ar: '',
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,6 +84,12 @@ const SettingsPage = () => {
           logo_url: settings.logo_url,
           logo_height: settings.logo_height,
           logo_width: settings.logo_width,
+          contact_email: settings.contact_email,
+          contact_phone: settings.contact_phone,
+          contact_address: settings.contact_address,
+          store_description_en: settings.store_description_en,
+          store_description_fr: settings.store_description_fr,
+          store_description_ar: settings.store_description_ar,
           updated_at: new Date().toISOString(),
         });
 
@@ -209,6 +227,102 @@ const SettingsPage = () => {
                   <p className="text-sm text-gray-500 mt-1">
                     {t('admin.settings.deliveryRules.deliveryCost.description')}
                   </p>
+                </div>
+
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold mb-4">{t('admin.settings.contactInfo.title')}</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="contact_email">{t('admin.settings.contactInfo.email')}</Label>
+                      <Input
+                        id="contact_email"
+                        type="email"
+                        value={settings.contact_email}
+                        onChange={(e) => 
+                          setSettings(prev => ({ 
+                            ...prev, 
+                            contact_email: e.target.value 
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="contact_phone">{t('admin.settings.contactInfo.phone')}</Label>
+                      <Input
+                        id="contact_phone"
+                        type="tel"
+                        value={settings.contact_phone}
+                        onChange={(e) => 
+                          setSettings(prev => ({ 
+                            ...prev, 
+                            contact_phone: e.target.value 
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="contact_address">{t('admin.settings.contactInfo.address')}</Label>
+                      <Input
+                        id="contact_address"
+                        type="text"
+                        value={settings.contact_address}
+                        onChange={(e) => 
+                          setSettings(prev => ({ 
+                            ...prev, 
+                            contact_address: e.target.value 
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold mb-4">{t('admin.settings.storeInfo.title')}</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="store_description_en">{t('admin.settings.storeInfo.descriptionEn')}</Label>
+                      <Input
+                        id="store_description_en"
+                        type="text"
+                        value={settings.store_description_en}
+                        onChange={(e) => 
+                          setSettings(prev => ({ 
+                            ...prev, 
+                            store_description_en: e.target.value 
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="store_description_fr">{t('admin.settings.storeInfo.descriptionFr')}</Label>
+                      <Input
+                        id="store_description_fr"
+                        type="text"
+                        value={settings.store_description_fr}
+                        onChange={(e) => 
+                          setSettings(prev => ({ 
+                            ...prev, 
+                            store_description_fr: e.target.value 
+                          }))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="store_description_ar">{t('admin.settings.storeInfo.descriptionAr')}</Label>
+                      <Input
+                        id="store_description_ar"
+                        type="text"
+                        value={settings.store_description_ar}
+                        onChange={(e) => 
+                          setSettings(prev => ({ 
+                            ...prev, 
+                            store_description_ar: e.target.value 
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="md:col-span-2">

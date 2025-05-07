@@ -241,6 +241,13 @@
         "height": "Hauteur du Logo (px)",
         "description": "Téléchargez un logo pour votre magasin. Recommandé : PNG ou SVG carré, max 1MB."
       },
+      "contactInfo": {
+        "title": "Informations de Contact",
+        "email": "Email de Contact",
+        "phone": "Téléphone de Contact",
+        "address": "Adresse de Contact",
+        "description": "Mettez à jour les informations de contact de votre magasin qui seront affichées dans le pied de page"
+      },
       "saveButton": "Enregistrer les Paramètres",
       "savingButton": "Enregistrement...",
       "success": "Paramètres mis à jour avec succès",

@@ -221,6 +221,12 @@
     },
     "settings": {
       "title": "Settings",
+      "storeInfo": {
+        "title": "Store Information",
+        "descriptionEn": "Store Description (English)",
+        "descriptionFr": "Store Description (French)",
+        "descriptionAr": "Store Description (Arabic)"
+      },
       "deliveryRules": {
         "title": "Delivery Cost Rules",
         "enableRules": "Enable Delivery Cost Rules",
@@ -240,6 +246,13 @@
         "width": "Logo Width (px)",
         "height": "Logo Height (px)",
         "description": "Upload a logo for your store. Recommended: square PNG or SVG, max 1MB."
+      },
+      "contactInfo": {
+        "title": "Contact Information",
+        "email": "Contact Email",
+        "phone": "Contact Phone",
+        "address": "Contact Address",
+        "description": "Update your store's contact information that will be displayed in the footer"
       },
       "saveButton": "Save Settings",
       "savingButton": "Saving...",

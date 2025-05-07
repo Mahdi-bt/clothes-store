@@ -19,6 +19,11 @@ const resources = {
   }
 };
 
+// Function to set document direction
+const setDocumentDirection = (lng: string) => {
+  document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
+};
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -32,6 +37,15 @@ i18n
       order: ['localStorage', 'navigator'],
       caches: ['localStorage']
     }
+  })
+  .then(() => {
+    // Set initial direction based on detected language
+    setDocumentDirection(i18n.language);
   });
+
+// Add event listener for language changes
+i18n.on('languageChanged', (lng) => {
+  setDocumentDirection(lng);
+});
 
 export default i18n; 
