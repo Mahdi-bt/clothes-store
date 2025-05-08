@@ -136,7 +136,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 leading-tight">
                             {product.name || product.name_en}
                           </h2>
-                          <p className="text-sm sm:text-base mb-4 sm:mb-6 text-gray-100 max-w-md mx-auto md:mx-0 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                          <p className="text-sm sm:text-base mb-4 sm:mb-6 text-gray-100 max-w-md mx-auto md:mx-0 leading-relaxed line-clamp-3 sm:line-clamp-4">
                             {product.description || product.description_en}
                           </p>
                           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center md:justify-start">

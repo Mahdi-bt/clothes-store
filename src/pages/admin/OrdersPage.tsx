@@ -18,11 +18,12 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
-import { Search, Trash2, Eye } from 'lucide-react';
+import { Search, Trash2, Eye, Printer } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import OrderReceipt from '../../components/ui/OrderReceipt';
 
 interface OrderItem {
   id: string;
@@ -34,6 +35,7 @@ interface OrderItem {
   product_variant: {
     size: string;
     color: string;
+    sku: string;
     product: {
       name_en: string;
       name_fr: string;
@@ -57,9 +59,10 @@ interface Order {
   status: 'pending' | 'processing' | 'delivered' | 'cancelled' | 'completed';
   created_at: string;
   order_items: OrderItem[];
+  delivery_fee: number;
 }
 
-const OrdersPage = () => {
+const OrdersPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
   const [viewOrder, setViewOrder] = useState<Order | null>(null);
@@ -70,7 +73,7 @@ const OrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [sortConfig, setSortConfig] = useState<{
-    key: 'date' | 'status' | 'total' | 'customer' | null;
+    key: 'date' | 'status' | 'total' | 'customer' | 'phone' | null;
     direction: 'asc' | 'desc';
   }>({
     key: null,
@@ -78,6 +81,8 @@ const OrdersPage = () => {
   });
   const [statusFilter, setStatusFilter] = useState<Order['status'] | 'all'>('all');
   const { i18n, t } = useTranslation();
+  const [receiptLanguage, setReceiptLanguage] = useState(i18n.language);
+  const [isReceiptDialogOpen, setIsReceiptDialogOpen] = useState(false);
   
   useEffect(() => {
     fetchOrders();
@@ -90,6 +95,7 @@ const OrdersPage = () => {
         .from('orders')
         .select(`
           *,
+          delivery_fee,
           order_items(
             *,
             product_variant:product_variants(
@@ -110,6 +116,7 @@ const OrdersPage = () => {
       const transformedData = await Promise.all((data || []).map(async order => {
         const transformedOrder = {
           ...order,
+          delivery_fee: order.delivery_fee,
           order_items: await Promise.all(order.order_items.map(async item => {
             const productVariant = item.product_variant;
             const product = productVariant?.product;
@@ -173,6 +180,11 @@ const OrdersPage = () => {
   const handleViewOrder = (order: Order) => {
     setViewOrder(order);
     setIsViewDialogOpen(true);
+  };
+
+  const handlePrintReceipt = (order: Order) => {
+    setViewOrder(order);
+    setIsReceiptDialogOpen(true);
   };
 
   const handleUpdateStatus = async (orderId: string, newStatus: Order['status']) => {
@@ -294,7 +306,7 @@ const OrdersPage = () => {
     }
   };
 
-  const handleSort = (key: 'date' | 'status' | 'total' | 'customer') => {
+  const handleSort = (key: 'date' | 'status' | 'total' | 'customer' | 'phone') => {
     setSortConfig(current => ({
       key,
       direction: current.key === key && current.direction === 'asc' ? 'desc' : 'asc'
@@ -333,6 +345,12 @@ const OrdersPage = () => {
       return sortConfig.direction === 'asc'
         ? a.customer_name.localeCompare(b.customer_name)
         : b.customer_name.localeCompare(a.customer_name);
+    }
+
+    if (sortConfig.key === 'phone') {
+      return sortConfig.direction === 'asc'
+        ? a.phone.localeCompare(b.phone)
+        : b.phone.localeCompare(a.phone);
     }
 
     return 0;
@@ -435,6 +453,17 @@ const OrdersPage = () => {
                     </TableHead>
                     <TableHead 
                       className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleSort('phone')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>{t('admin.orders.viewDialog.phone')}</span>
+                        {sortConfig.key === 'phone' && (
+                          <span>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-gray-50"
                       onClick={() => handleSort('date')}
                     >
                       <div className="flex items-center space-x-1">
@@ -473,10 +502,11 @@ const OrdersPage = () => {
                   {sortedOrders.map((order) => (
                     <TableRow key={order.id}>
                       <TableCell>{order.customer_name}</TableCell>
+                      <TableCell className="font-mono">{order.phone}</TableCell>
                       <TableCell>
                         {new Date(order.created_at).toLocaleDateString()}
                       </TableCell>
-                      <TableCell>TND{order.total_amount.toFixed(2)}</TableCell>
+                      <TableCell>TND{(order.total_amount + (order.delivery_fee || 0)).toFixed(2)}</TableCell>
                       <TableCell>{getStatusBadge(order.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
@@ -486,6 +516,13 @@ const OrdersPage = () => {
                             onClick={() => handleViewOrder(order)}
                           >
                             <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handlePrintReceipt(order)}
+                          >
+                            <Printer className="h-4 w-4" />
                           </Button>
                           <Button 
                             variant="outline" 
@@ -558,83 +595,133 @@ const OrdersPage = () => {
 
       {/* View Order Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">{t('admin.orders.viewDialog.title')} #{viewOrder?.id}</DialogTitle>
+            <DialogTitle className="text-xl sm:text-2xl font-bold">{t('admin.orders.viewDialog.title')}</DialogTitle>
           </DialogHeader>
-          
+
           {viewOrder && (
-            <div className="space-y-6 py-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-3 text-gray-800">{t('admin.orders.viewDialog.customerInfo')}</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Name:</span>
-                      <span className="font-medium">{viewOrder.customer_name}</span>
+            <div className="space-y-6 sm:space-y-8">
+              {/* Status Banner */}
+              <div className={`p-3 sm:p-4 rounded-lg ${
+                viewOrder.status === 'completed' ? 'bg-green-50 border border-green-200' :
+                viewOrder.status === 'processing' ? 'bg-blue-50 border border-blue-200' :
+                viewOrder.status === 'cancelled' ? 'bg-red-50 border border-red-200' :
+                'bg-yellow-50 border border-yellow-200'
+              }`}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      viewOrder.status === 'completed' ? 'bg-green-500' :
+                      viewOrder.status === 'processing' ? 'bg-blue-500' :
+                      viewOrder.status === 'cancelled' ? 'bg-red-500' :
+                      'bg-yellow-500'
+                    }`} />
+                    <span className="font-medium">
+                      {t(`admin.orders.status.${viewOrder.status}`)}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-500">
+                    {new Date(viewOrder.created_at).toLocaleString(i18n.language, {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
+                {/* Customer Information */}
+                <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    {t('admin.orders.viewDialog.customerInfo')}
+                  </h3>
+                  <div className="space-y-3 sm:space-y-4">
+                    <div>
+                      <p className="text-sm text-gray-500">{t('admin.orders.viewDialog.name')}</p>
+                      <p className="font-medium break-words">{viewOrder.customer_name}</p>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Phone:</span>
-                      <span className="font-medium">{viewOrder.phone}</span>
+                    <div>
+                      <p className="text-sm text-gray-500">{t('admin.orders.viewDialog.phone')}</p>
+                      <p className="font-medium break-words">{viewOrder.phone}</p>
+                      {viewOrder.alternate_phone && (
+                        <p className="text-sm text-gray-600 mt-1 break-words">{viewOrder.alternate_phone}</p>
+                      )}
                     </div>
-                    {viewOrder.alternate_phone && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Alt. Phone:</span>
-                        <span className="font-medium">{viewOrder.alternate_phone}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Address:</span>
-                      <span className="font-medium text-right max-w-[200px]">{viewOrder.address}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Governorate:</span>
-                      <span className="font-medium">{viewOrder.governorate || '-'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Delegation:</span>
-                      <span className="font-medium">{viewOrder.delegation || '-'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Zip Code:</span>
-                      <span className="font-medium">{viewOrder.zip_code || '-'}</span>
+                    <div>
+                      <p className="text-sm text-gray-500">{t('admin.orders.viewDialog.address')}</p>
+                      <p className="font-medium break-words">{viewOrder.address}</p>
+                      {(viewOrder.governorate || viewOrder.delegation) && (
+                        <p className="text-sm text-gray-600 mt-1 break-words">
+                          {[viewOrder.governorate, viewOrder.delegation].filter(Boolean).join(', ')}
+                        </p>
+                      )}
+                      {viewOrder.zip_code && (
+                        <p className="text-sm text-gray-600 break-words">{viewOrder.zip_code}</p>
+                      )}
                     </div>
                   </div>
                 </div>
-                
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-3 text-gray-800">{t('admin.orders.viewDialog.orderInfo')}</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Order ID:</span>
-                      <span className="font-medium">{viewOrder.id}</span>
+
+                {/* Order Information */}
+                <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    {t('admin.orders.viewDialog.orderInfo')}
+                  </h3>
+                  <div className="space-y-3 sm:space-y-4">
+                    <div>
+                      <p className="text-sm text-gray-500">{t('admin.orders.viewDialog.orderId')}</p>
+                      <p className="font-medium break-all">{viewOrder.id}</p>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Date:</span>
-                      <span className="font-medium">{new Date(viewOrder.created_at).toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Status:</span>
-                      <span>{getStatusBadge(viewOrder.status)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Total Amount:</span>
-                      <span className="font-medium">TND{viewOrder.total_amount.toFixed(2)}</span>
+                    <div>
+                      <p className="text-sm text-gray-500">{t('admin.orders.viewDialog.totalAmount')}</p>
+                      <div className="space-y-1">
+                        <div className="flex justify-between">
+                          <span>{t('admin.orders.viewDialog.receipt.subtotal')}</span>
+                          <span>TND{viewOrder.total_amount.toFixed(2)}</span>
+                        </div>
+                        {viewOrder.delivery_fee !== undefined && viewOrder.delivery_fee !== null && (
+                          <div className="flex justify-between">
+                            <span>{t('admin.orders.viewDialog.receipt.delivery')}</span>
+                            <span>TND{viewOrder.delivery_fee.toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between font-bold text-lg mt-2">
+                          <span>{t('admin.orders.viewDialog.receipt.total')}</span>
+                          <span className="text-primary">TND{(viewOrder.total_amount + (viewOrder.delivery_fee || 0)).toFixed(2)}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              <div className="bg-white rounded-lg border">
-                <div className="p-4 border-b">
-                  <h3 className="font-semibold text-gray-800">{t('admin.orders.viewDialog.items')}</h3>
+
+              {/* Order Items */}
+              <div className="bg-white rounded-lg border shadow-sm">
+                <div className="p-4 sm:p-6 border-b">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    {t('admin.orders.viewDialog.orderItems')}
+                  </h3>
                 </div>
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow>
-                        <TableHead>{t('admin.orders.viewDialog.product')}</TableHead>
-                        <TableHead>{t('admin.orders.viewDialog.variant')}</TableHead>
+                      <TableRow className="bg-gray-50">
+                        <TableHead className="w-[30%] sm:w-[40%]">{t('admin.orders.viewDialog.product')}</TableHead>
+                        <TableHead className="hidden sm:table-cell">{t('admin.orders.viewDialog.variant')}</TableHead>
+                        <TableHead className="hidden sm:table-cell">{t('admin.orders.viewDialog.sku')}</TableHead>
                         <TableHead className="text-right">{t('admin.orders.viewDialog.price')}</TableHead>
                         <TableHead className="text-right">{t('admin.orders.viewDialog.quantity')}</TableHead>
                         <TableHead className="text-right">{t('admin.orders.viewDialog.total')}</TableHead>
@@ -642,141 +729,126 @@ const OrdersPage = () => {
                     </TableHeader>
                     <TableBody>
                       {viewOrder.order_items.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell>
-                            <div className="flex items-center space-x-3">
-                              <div className="w-12 h-12 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-                                <img 
-                                  src={
-                                    item.product_variant.product.images && item.product_variant.product.images[0]
-                                      ? item.product_variant.product.images[0]
-                                      : '/placeholder.svg'
-                                  }
-                                  alt={item.product_variant.product[`name_${i18n.language}`] || item.product_variant.product.name_en}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = '/placeholder.svg';
-                                  }}
-                                />
-                              </div>
+                        <TableRow key={item.id} className="hover:bg-gray-50">
+                          <TableCell className="font-medium">
+                            <div className="space-y-1">
                               <div>
-                                <p className="font-medium text-gray-900">{
-                                  (() => {
-                                    const p = item.product_variant.product;
-                                    if (!p || typeof p !== 'object') return 'Unknown Product';
-                                    const lang = i18n.language;
-                                    if (typeof p[`name_${lang}`] === 'string' && p[`name_${lang}`]) return p[`name_${lang}`];
-                                    if ('name_en' in p && typeof p.name_en === 'string' && p.name_en) return p.name_en;
-                                    if ('name_fr' in p && typeof p.name_fr === 'string' && p.name_fr) return p.name_fr;
-                                    if ('name_ar' in p && typeof p.name_ar === 'string' && p.name_ar) return p.name_ar;
-                                    return 'Unknown Product';
-                                  })()
-                                }</p>
-                                {item.discount > 0 && (
-                                  <p className="text-sm text-gray-500">
-                                    {item.discount}% off
-                                  </p>
-                                )}
+                                {i18n.language === 'ar' 
+                                  ? item.product_variant.product.name_ar 
+                                  : i18n.language === 'fr' 
+                                    ? item.product_variant.product.name_fr 
+                                    : item.product_variant.product.name_en}
+                              </div>
+                              <div className="sm:hidden text-sm text-gray-500">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                  {item.product_variant.size} - {item.product_variant.color}
+                                </span>
+                                <span className="block mt-1 font-mono text-xs">
+                                  {item.product_variant.sku}
+                                </span>
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <p className="text-sm">
-                                <span className="text-gray-500">Size:</span>{' '}
-                                <span className="font-medium">{item.product_variant.size}</span>
-                              </p>
-                              <p className="text-sm">
-                                <span className="text-gray-500">Color:</span>{' '}
-                                <span className="font-medium">{item.product_variant.color}</span>
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="space-y-1">
-                              {item.discount > 0 && (
-                                <p className="text-sm text-gray-500 line-through">
-                                  TND{item.price.toFixed(2)}
-                                </p>
-                              )}
-                              <p className="font-medium">
-                                TND{item.price_at_time.toFixed(2)}
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <span className="font-medium">{item.quantity}</span>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <span className="font-medium">
-                              TND{(item.price_at_time * item.quantity).toFixed(2)}
+                          <TableCell className="hidden sm:table-cell">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                              {item.product_variant.size} - {item.product_variant.color}
                             </span>
                           </TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                            <span className="font-mono text-sm text-gray-600">
+                              {item.product_variant.sku}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-right">TND{item.price_at_time.toFixed(2)}</TableCell>
+                          <TableCell className="text-right">{item.quantity}</TableCell>
+                          <TableCell className="text-right font-medium">TND{(item.price_at_time * item.quantity).toFixed(2)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </div>
               </div>
-              
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t">
-                <div className="flex flex-wrap gap-2">
-                  <Button 
-                    variant="outline"
-                    onClick={() => handleUpdateStatus(viewOrder.id, 'processing')}
-                    disabled={viewOrder.status === 'processing' || updatingStatus === viewOrder.id}
-                    className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
-                  >
-                    {updatingStatus === viewOrder.id ? (
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 border-2 border-blue-700 border-t-transparent rounded-full animate-spin mr-2"></div>
-                        {t('admin.orders.viewDialog.updating')}
-                      </div>
-                    ) : (
-                      'Mark as Processing'
-                    )}
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => handleUpdateStatus(viewOrder.id, 'completed')}
-                    disabled={viewOrder.status === 'completed' || updatingStatus === viewOrder.id}
-                    className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
-                  >
-                    {updatingStatus === viewOrder.id ? (
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 border-2 border-green-700 border-t-transparent rounded-full animate-spin mr-2"></div>
-                        {t('admin.orders.viewDialog.updating')}
-                      </div>
-                    ) : (
-                      'Mark as Completed'
-                    )}
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => handleUpdateStatus(viewOrder.id, 'cancelled')}
-                    disabled={viewOrder.status === 'cancelled' || updatingStatus === viewOrder.id}
-                    className="bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
-                  >
-                    {updatingStatus === viewOrder.id ? (
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 border-2 border-red-700 border-t-transparent rounded-full animate-spin mr-2"></div>
-                        {t('admin.orders.viewDialog.updating')}
-                      </div>
-                    ) : (
-                      'Cancel Order'
-                    )}
-                  </Button>
-                </div>
-                
-                <div className="text-right">
-                  <p className="text-sm text-gray-500 mb-1">{t('admin.orders.viewDialog.totalAmount')}</p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    TND{viewOrder.total_amount.toFixed(2)}
-                  </p>
-                </div>
+
+              {/* Order Actions */}
+              <div className="flex flex-wrap gap-2 sm:gap-3 pt-4 border-t">
+                <Button 
+                  variant="outline"
+                  onClick={() => handleUpdateStatus(viewOrder.id, 'processing')}
+                  disabled={viewOrder.status === 'processing' || updatingStatus === viewOrder.id}
+                  className="flex-1 sm:flex-none bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+                >
+                  {updatingStatus === viewOrder.id ? (
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 border-2 border-blue-700 border-t-transparent rounded-full animate-spin mr-2"></div>
+                      {t('admin.orders.viewDialog.updating')}
+                    </div>
+                  ) : (
+                    t('admin.orders.actions.markProcessing')
+                  )}
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => handleUpdateStatus(viewOrder.id, 'completed')}
+                  disabled={viewOrder.status === 'completed' || updatingStatus === viewOrder.id}
+                  className="flex-1 sm:flex-none bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                >
+                  {updatingStatus === viewOrder.id ? (
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 border-2 border-green-700 border-t-transparent rounded-full animate-spin mr-2"></div>
+                      {t('admin.orders.viewDialog.updating')}
+                    </div>
+                  ) : (
+                    t('admin.orders.actions.markCompleted')
+                  )}
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => handleUpdateStatus(viewOrder.id, 'cancelled')}
+                  disabled={viewOrder.status === 'cancelled' || updatingStatus === viewOrder.id}
+                  className="flex-1 sm:flex-none bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
+                >
+                  {updatingStatus === viewOrder.id ? (
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 border-2 border-red-700 border-t-transparent rounded-full animate-spin mr-2"></div>
+                      {t('admin.orders.viewDialog.updating')}
+                    </div>
+                  ) : (
+                    t('admin.orders.actions.cancelOrder')
+                  )}
+                </Button>
               </div>
             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Receipt Dialog */}
+      <Dialog open={isReceiptDialogOpen} onOpenChange={setIsReceiptDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>{t('admin.orders.viewDialog.receipt.title')}</DialogTitle>
+          </DialogHeader>
+
+          {/* Language Selection */}
+          <div className="flex justify-end mb-4">
+            <select
+              value={receiptLanguage}
+              onChange={(e) => setReceiptLanguage(e.target.value)}
+              className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="ar">العربية</option>
+            </select>
+          </div>
+
+          {/* Order Receipt */}
+          {viewOrder && (
+            <OrderReceipt
+              order={viewOrder}
+              items={viewOrder.order_items}
+              language={receiptLanguage}
+            />
           )}
         </DialogContent>
       </Dialog>

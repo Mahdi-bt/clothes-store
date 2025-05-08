@@ -42,27 +42,42 @@ export type CartItem = {
   quantity: number;
 };
 
-export type OrderItem = {
-  id: string;
-  order_id: string;
-  product_id: string;
-  quantity: number;
-  price: number;
-  product?: Product;
-};
-
-export type Order = {
+export interface Order {
   id: string;
   customer_name: string;
-  customer_email: string;
-  customer_phone: string;
-  shipping_address: string;
-  status: 'pending' | 'processing' | 'delivered' | 'cancelled';
+  phone: string;
+  alternate_phone: string | null;
+  address: string;
+  governorate?: string;
+  delegation?: string;
+  zip_code?: string;
+  email: string;
   total_amount: number;
+  status: 'pending' | 'processing' | 'delivered' | 'completed' | 'cancelled';
   created_at: string;
-  updated_at?: string;
-  order_items?: OrderItem[];
-};
+  order_items: OrderItem[];
+  delivery_fee?: number;
+}
+
+export interface OrderItem {
+  id: string;
+  product_variant_id: string;
+  quantity: number;
+  price: number;
+  price_at_time: number;
+  discount: number;
+  product_variant: {
+    size: string;
+    color: string;
+    sku: string;
+    product: {
+      name_en: string;
+      name_fr: string;
+      name_ar: string;
+      images: string[];
+    };
+  };
+}
 
 export interface ProductVariant {
   id: string;

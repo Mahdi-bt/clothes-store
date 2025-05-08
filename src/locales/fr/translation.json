@@ -198,12 +198,29 @@
         "totalAmount": "Montant Total",
         "product": "Produit",
         "variant": "Variante",
+        "sku": "Référence",
         "price": "Prix",
         "quantity": "Quantité",
         "total": "Total",
         "size": "Taille",
         "color": "Couleur",
-        "off": "de réduction"
+        "off": "de réduction",
+        "updating": "Mise à jour...",
+        "printReceipt": "Imprimer le Reçu",
+        "receipt": {
+          "title": "Reçu de Commande",
+          "orderNumber": "Commande #",
+          "date": "Date",
+          "customer": "Client",
+          "phone": "Téléphone",
+          "address": "Adresse de Livraison",
+          "items": "Articles",
+          "subtotal": "Sous-total",
+          "delivery": "Livraison",
+          "total": "Total",
+          "thankYou": "Merci pour votre commande !",
+          "status": "Statut"
+        }
       },
       "actions": {
         "markProcessing": "Marquer comme En Cours",
@@ -216,7 +233,8 @@
         "confirm": "Êtes-vous sûr de vouloir supprimer cette commande ?",
         "warning": "Cette action ne peut pas être annulée.",
         "deleting": "Suppression...",
-        "delete": "Supprimer la Commande"
+        "delete": "Supprimer la Commande",
+        "cancel": "Annuler"
       }
     },
     "settings": {

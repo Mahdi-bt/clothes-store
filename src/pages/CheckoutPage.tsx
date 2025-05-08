@@ -229,7 +229,8 @@ const CheckoutPage = () => {
             governorate: formData.state,
             delegation: formData.subState,
             zip_code: formData.zipCode,
-            total_amount: safeTotal,
+            total_amount: safeSubtotal,
+            delivery_fee: shippingCost,
             status: 'pending'
           }
         ])

@@ -198,12 +198,29 @@
         "totalAmount": "Total Amount",
         "product": "Product",
         "variant": "Variant",
+        "sku": "SKU",
         "price": "Price",
         "quantity": "Quantity",
         "total": "Total",
         "size": "Size",
         "color": "Color",
-        "off": "off"
+        "off": "off",
+        "updating": "Updating...",
+        "printReceipt": "Print Receipt",
+        "receipt": {
+          "title": "Order Receipt",
+          "orderNumber": "Order #",
+          "date": "Date",
+          "customer": "Customer",
+          "phone": "Phone",
+          "address": "Delivery Address",
+          "items": "Items",
+          "subtotal": "Subtotal",
+          "delivery": "Delivery",
+          "total": "Total",
+          "thankYou": "Thank you for your order!",
+          "status": "Status"
+        }
       },
       "actions": {
         "markProcessing": "Mark as Processing",
@@ -216,7 +233,8 @@
         "confirm": "Are you sure you want to delete this order?",
         "warning": "This action cannot be undone.",
         "deleting": "Deleting...",
-        "delete": "Delete Order"
+        "delete": "Delete Order",
+        "cancel": "Cancel"
       }
     },
     "settings": {
