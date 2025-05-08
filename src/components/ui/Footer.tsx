@@ -62,6 +62,7 @@ const Footer: React.FC = () => {
     tiktok_url_ar: '',
   });
   const [categories, setCategories] = useState<Category[]>([]);
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -234,21 +235,31 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold border-b border-blue-400/30 pb-2 inline-block">
               {t('common.categories')}
             </h3>
-            <ul className="space-y-2">
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <Link 
-                    to={`/category/${category.id}`} 
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center group"
-                  >
-                    <span className={`w-1.5 h-1.5 bg-blue-400 rounded-full ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'} group-hover:scale-150 transition-transform duration-300`}></span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300 text-sm">
-                      {getCategoryName(category)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="relative">
+              <ul className={`grid grid-cols-2 md:grid-cols-3 gap-2 transition-all duration-300 ${!showAllCategories ? 'max-h-48 overflow-hidden' : ''}`}>
+                {categories.slice(0, showAllCategories ? categories.length : 8).map((category) => (
+                  <li key={category.id}>
+                    <Link 
+                      to={`/category/${category.id}`} 
+                      className="text-gray-400 hover:text-blue-400 transition-colors flex items-center group"
+                    >
+                      <span className={`w-1.5 h-1.5 bg-blue-400 rounded-full ${currentLanguage === 'ar' ? 'ml-2' : 'mr-2'} group-hover:scale-150 transition-transform duration-300`}></span>
+                      <span className="group-hover:translate-x-1 transition-transform duration-300 text-sm">
+                        {getCategoryName(category)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {categories.length > 8 && (
+                <button 
+                  onClick={() => setShowAllCategories(!showAllCategories)} 
+                  className="mt-2 text-blue-400 hover:text-blue-300 transition-colors text-sm"
+                >
+                  {showAllCategories ? t('common.showLess') : t('common.showMore')}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Contact Section */}

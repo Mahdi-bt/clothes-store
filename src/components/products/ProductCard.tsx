@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, BadgePercent } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product & { name?: string; description?: string };
@@ -48,7 +49,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <Button
             onClick={(e) => {
               e.preventDefault();
-              addItem(product);
+              // Ensure the product has at least one variant
+              if (product.variants && product.variants.length > 0) {
+                const variant = product.variants[0]; // Use the first variant as default
+                addItem({
+                  productId: product.id,
+                  variantId: variant.id,
+                  quantity: 1,
+                  size: variant.size,
+                  color: variant.color
+                });
+              } else {
+                toast.error(t('product.error.noVariants'));
+              }
             }}
             size="sm"
             className="relative overflow-hidden bg-gradient-to-r from-ecommerce-purple to-ecommerce-deep-purple text-white text-xs font-medium shadow-sm transition-all duration-300 rounded-full px-4 py-1.5 hover:shadow-md hover:scale-105 group/btn"

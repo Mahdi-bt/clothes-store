@@ -45,32 +45,34 @@ export type CartItem = {
 export interface Order {
   id: string;
   customer_name: string;
-  phone: string;
-  alternate_phone: string | null;
-  address: string;
-  governorate?: string;
-  delegation?: string;
-  zip_code?: string;
-  email: string;
+  customer_phone: string;
+  customer_alt_phone?: string;
+  customer_address: string;
+  customer_governorate: string;
+  customer_delegation: string;
+  customer_zip_code?: string;
   total_amount: number;
+  delivery_fee: number;
   status: 'pending' | 'processing' | 'delivered' | 'completed' | 'cancelled';
   created_at: string;
   order_items: OrderItem[];
-  delivery_fee?: number;
 }
 
 export interface OrderItem {
   id: string;
-  product_variant_id: string;
+  order_id: string;
+  product_id: string;
   quantity: number;
   price: number;
   price_at_time: number;
   discount: number;
   product_variant: {
+    id: string;
     size: string;
     color: string;
-    sku: string;
     product: {
+      id: string;
+      name: string;
       name_en: string;
       name_fr: string;
       name_ar: string;

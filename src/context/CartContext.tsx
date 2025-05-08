@@ -60,15 +60,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         i => i.productId === item.productId && i.variantId === item.variantId
       );
 
+      let newItems;
       if (existingItemIndex > -1) {
-        const newItems = [...currentItems];
+        newItems = [...currentItems];
         newItems[existingItemIndex].quantity += item.quantity;
         toast.success(t('cart.success.quantityUpdated'));
-        return newItems;
+      } else {
+        newItems = [...currentItems, item];
+        toast.success(t('cart.success.itemAdded'));
       }
 
-      toast.success(t('cart.success.itemAdded'));
-      return [...currentItems, item];
+      // Save to localStorage immediately
+      localStorage.setItem('cart', JSON.stringify(newItems));
+      return newItems;
     });
   };
 

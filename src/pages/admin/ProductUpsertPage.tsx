@@ -463,6 +463,9 @@ const ProductUpsertPage = () => {
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                     <SelectItem value="unisex">Unisex</SelectItem>
+                    <SelectItem value="kids">Kids</SelectItem>
+                    <SelectItem value="baby">Baby</SelectItem>
+                    <SelectItem value="toddler">Toddler</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
