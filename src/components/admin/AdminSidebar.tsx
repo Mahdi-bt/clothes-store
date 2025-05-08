@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ const AdminSidebar: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { logoData } = useAppLogo();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
   const isRTL = i18n.language === 'ar';
   
@@ -29,10 +30,28 @@ const AdminSidebar: React.FC = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+    document.body.style.overflow = !isMobileMenuOpen ? 'hidden' : '';
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMobileMenuOpen(false);
+        document.body.style.overflow = '';
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.body.style.overflow = '';
+    };
+  }, []);
   
   const SidebarContent = () => (
-    <>
+    <div className="flex flex-col h-full bg-white border-r border-gray-200">
       <div className="px-4 py-6 border-b flex flex-col items-center">
         {logoData.url ? (
           <img 
@@ -65,7 +84,7 @@ const AdminSidebar: React.FC = () => {
         </div>
       )}
       
-      <nav className="flex-grow px-2 py-4">
+      <nav className="flex-grow px-2 py-4 overflow-y-auto">
         <ul className="space-y-1">
           {navItems.map((item) => (
             <li key={item.path}>
@@ -78,7 +97,12 @@ const AdminSidebar: React.FC = () => {
                     ? 'bg-ecommerce-light-purple text-ecommerce-purple font-medium shadow-sm'
                     : 'text-gray-600 hover:text-ecommerce-purple'
                 )}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  if (isMobile) {
+                    setIsMobileMenuOpen(false);
+                    document.body.style.overflow = '';
+                  }
+                }}
               >
                 <span className={cn(
                   'mr-3 transition-colors',
@@ -104,7 +128,7 @@ const AdminSidebar: React.FC = () => {
           {t('admin.logout')}
         </Button>
       </div>
-    </>
+    </div>
   );
   
   return (
@@ -124,32 +148,26 @@ const AdminSidebar: React.FC = () => {
       {/* Mobile sidebar backdrop */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
           onClick={toggleMobileMenu}
         />
       )}
 
       {/* Sidebar */}
       <div className={cn(
-        'fixed inset-y-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out',
-        'md:translate-x-0',
+        'h-full',
+        isMobile ? 'fixed inset-y-0 z-40 w-64 bg-white shadow-lg transform transition-all duration-300 ease-in-out' : 'w-full',
         isRTL ? 'right-0' : 'left-0',
-        isMobileMenuOpen 
+        isMobile && isMobileMenuOpen 
           ? 'translate-x-0' 
-          : isRTL 
+          : isMobile && isRTL 
             ? 'translate-x-full' 
-            : '-translate-x-full'
+            : isMobile 
+              ? '-translate-x-full' 
+              : 'translate-x-0'
       )}>
-        <div className="flex flex-col h-full">
-          <SidebarContent />
-        </div>
+        <SidebarContent />
       </div>
-
-      {/* Desktop spacer */}
-      <div className={cn(
-        "hidden md:block w-64",
-        isRTL ? "ml-auto" : ""
-      )} />
     </>
   );
 };

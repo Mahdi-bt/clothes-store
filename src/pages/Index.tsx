@@ -40,7 +40,6 @@ const Index = () => {
       try {
         setLoading(true);
         const fetchedProducts = await productService.getProducts();
-        console.log('Fetched products:', fetchedProducts); // Debug log
         setProducts(fetchedProducts);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -137,11 +136,12 @@ const Index = () => {
     return filtered;
   }, [products, getLocalizedField, searchQuery, genderFilter, materialFilter, brandFilter, sizeFilter, priceRange, sortField, sortOrder]);
 
-  // Debug log for carousel products
+  // Get carousel products (new arrivals)
   const carouselProducts = useMemo(() => {
-    const filtered = products.filter(p => p.images && p.images.length > 0).slice(0, 8);
-    console.log('Carousel products:', filtered); // Debug log
-    return filtered;
+    return products
+      .filter(p => p.images && p.images.length > 0)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 8);
   }, [products]);
 
   // Pagination logic
@@ -298,12 +298,16 @@ const Index = () => {
       <ProductCarousel
         title={t('home.newArrivals')}
         subtitle={t('home.newArrivalsSubtitle')}
-        products={carouselProducts.map(product => ({ ...product, name: getLocalizedField(product, 'name'), description: getLocalizedField(product, 'description') }))}
+        products={carouselProducts.map(product => ({ 
+          ...product, 
+          name: getLocalizedField(product, 'name'), 
+          description: getLocalizedField(product, 'description') 
+        }))}
         loading={loading}
       />
       
       {/* Best Sellers Carousel */}
-      <BestSellersCarousel />
+      <BestSellersCarousel products={products} loading={loading} />
       
       {/* Featured Products */}
       <section className="py-16 bg-gray-50 products-section">

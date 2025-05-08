@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Product } from '@/types';
-import { productService } from '@/lib/services/productService';
 import {
   Carousel,
   CarouselContent,
@@ -30,9 +29,14 @@ type SupabaseOrderItem = {
   };
 };
 
-const BestSellersCarousel: React.FC = () => {
+type BestSellersCarouselProps = {
+  products?: Product[];
+  loading?: boolean;
+};
+
+const BestSellersCarousel: React.FC<BestSellersCarouselProps> = ({ products: propProducts, loading: propLoading }) => {
   const { t, i18n } = useTranslation();
-  const [products, setProducts] = React.useState<LocalizedProduct[]>([]);
+  const [bestSellers, setBestSellers] = React.useState<LocalizedProduct[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [api, setApi] = React.useState<CarouselApi>();
   const autoplayRef = useRef<NodeJS.Timeout>();
@@ -70,8 +74,16 @@ const BestSellersCarousel: React.FC = () => {
     };
   }, [api, autoplay]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchBestSellers = async () => {
+      if (propProducts) {
+        // If products are provided as props, use them
+        const bestSellingProducts = await getBestSellingProducts(propProducts);
+        setBestSellers(bestSellingProducts);
+        setLoading(false);
+        return;
+      }
+
       try {
         // Fetch order items with their product variants and products
         const { data: orderItems, error } = await supabase
@@ -125,8 +137,7 @@ const BestSellersCarousel: React.FC = () => {
           .slice(0, 8)
           .map(item => item.product);
 
-        setProducts(bestSellers);
-        console.log('Best sellers:', bestSellers);
+        setBestSellers(bestSellers);
       } catch (error) {
         console.error('Error fetching best sellers:', error);
       } finally {
@@ -135,9 +146,74 @@ const BestSellersCarousel: React.FC = () => {
     };
 
     fetchBestSellers();
-  }, []);
+  }, [propProducts]);
 
-  if (loading) {
+  // Helper function to get best selling products from provided products
+  const getBestSellingProducts = async (products: Product[]) => {
+    try {
+      const { data: orderItems, error } = await supabase
+        .from('order_items')
+        .select(`
+          quantity,
+          product_variant:product_variants(
+            id,
+            product:products(
+              id,
+              name_en,
+              name_fr,
+              name_ar,
+              description_en,
+              description_fr,
+              description_ar,
+              selling_price,
+              discount,
+              images,
+              category_id,
+              is_active,
+              variants:product_variants(*)
+            )
+          ),
+          order:orders!inner(
+            status
+          )
+        `)
+        .eq('order.status', 'completed')
+        .in('product_variant.product.id', products.map(p => p.id));
+
+      if (error) throw error;
+
+      // Calculate total quantity sold for each product
+      const productSales = ((orderItems || []) as unknown as SupabaseOrderItem[]).reduce((acc, item) => {
+        if (!item.product_variant?.product) return acc;
+        
+        const productId = item.product_variant.product.id;
+        if (!acc[productId]) {
+          acc[productId] = {
+            product: item.product_variant.product,
+            totalSold: 0
+          };
+        }
+        acc[productId].totalSold += item.quantity;
+        return acc;
+      }, {} as Record<string, { product: Product; totalSold: number }>);
+
+      // Sort products by total sold
+      return products
+        .sort((a, b) => {
+          const salesA = productSales[a.id]?.totalSold || 0;
+          const salesB = productSales[b.id]?.totalSold || 0;
+          return salesB - salesA;
+        })
+        .slice(0, 8);
+    } catch (error) {
+      console.error('Error calculating best sellers:', error);
+      return products.slice(0, 8);
+    }
+  };
+
+  const isLoading = propLoading !== undefined ? propLoading : loading;
+
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -149,7 +225,7 @@ const BestSellersCarousel: React.FC = () => {
     );
   }
 
-  if (!loading && products.length === 0) {
+  if (!isLoading && bestSellers.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <p className="text-gray-500">{t('home.noProductsFound')}</p>
@@ -194,7 +270,7 @@ const BestSellersCarousel: React.FC = () => {
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
-              {products.map((product, index) => {
+              {bestSellers.map((product, index) => {
                 const lang = i18n.language;
                 const localizedName = product[`name_${lang}`] || product.name_en;
                 const localizedDescription = product[`description_${lang}`] || product.description_en;

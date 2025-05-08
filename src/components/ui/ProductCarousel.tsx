@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ArrowRight, ShoppingCart } from 'lucide-react';
 import { Product } from '@/types';
-import { productService } from '@/lib/services/productService';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -26,33 +25,15 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   loading: propLoading
 }) => {
   const { t } = useTranslation();
-  const [products, setProducts] = useState<LocalizedProduct[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<LocalizedProduct[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (propProducts) {
-        setProducts(propProducts);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const data = await productService.getProducts();
-        const latestProducts = data
-          .filter(product => product.images && product.images.length > 0)
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-          .slice(0, 5);
-        setProducts(latestProducts);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    if (propProducts) {
+      setProducts(propProducts);
+      setLoading(false);
+    }
   }, [propProducts]);
 
   useEffect(() => {

@@ -254,6 +254,14 @@
         "address": "Contact Address",
         "description": "Update your store's contact information that will be displayed in the footer"
       },
+      "socialMedia": {
+        "title": "Social Media Links",
+        "description": "Update your store's social media links that will be displayed in the footer",
+        "facebook": "Facebook URL",
+        "instagram": "Instagram URL",
+        "twitter": "Twitter URL",
+        "tiktok": "TikTok URL"
+      },
       "saveButton": "Save Settings",
       "savingButton": "Saving...",
       "success": "Settings updated successfully",

@@ -31,8 +31,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <AdminSidebar />
-      <main className="flex-1 p-8">{children}</main>
+      <div className="hidden md:block w-64 flex-shrink-0">
+        <AdminSidebar />
+      </div>
+      <div className="md:hidden">
+        <AdminSidebar />
+      </div>
+      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">{children}</main>
     </div>
   );
 };

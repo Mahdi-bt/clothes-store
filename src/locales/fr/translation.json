@@ -253,7 +253,15 @@
       "success": "Paramètres mis à jour avec succès",
       "error": "Échec de la mise à jour des paramètres",
       "logoSuccess": "Logo téléchargé avec succès !",
-      "logoError": "Échec du téléchargement du logo"
+      "logoError": "Échec du téléchargement du logo",
+      "socialMedia": {
+        "title": "Liens des Réseaux Sociaux",
+        "description": "Mettez à jour les liens des réseaux sociaux de votre magasin qui seront affichés dans le pied de page",
+        "facebook": "URL Facebook",
+        "instagram": "URL Instagram",
+        "twitter": "URL Twitter",
+        "tiktok": "URL TikTok"
+      }
     },
     "role": "Administrateur",
     "newProduct": "Nouveau produit",

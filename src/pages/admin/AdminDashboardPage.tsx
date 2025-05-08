@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PackageIcon, TagIcon, ShoppingBagIcon, CreditCardIcon, DatabaseIcon } from 'lucide-react';
+import { PackageIcon, TagIcon, ShoppingBagIcon, CreditCardIcon, DatabaseIcon, CalendarIcon } from 'lucide-react';
 import { productService } from '../../lib/services/productService';
 import { categoryService } from '../../lib/services/categoryService';
 import { orderService } from '../../lib/services/orderService';
@@ -18,9 +18,19 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  Legend,
+  AreaChart,
+  Area,
+  LineChart,
+  Line
 } from 'recharts';
 import { useTranslation } from 'react-i18next';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { format } from 'date-fns';
 
 interface OrderItem {
   id: string;
@@ -85,7 +95,10 @@ const COLORS = {
   indexSize: '#10B981',   // Green
   cacheHit: '#F59E0B',    // Amber
   connections: '#8B5CF6',  // Purple
-  tables: '#EC4899'       // Pink
+  tables: '#EC4899',      // Pink
+  sales: '#8884d8',       // Purple
+  revenue: '#82ca9d',     // Green
+  profit: '#ffc658'       // Yellow
 };
 
 const formatBytes = (bytes: number): string => {
@@ -106,6 +119,15 @@ const AdminDashboardPage = () => {
   const [dbUsage, setDbUsage] = useState<DatabaseUsage | null>(null);
   const [loading, setLoading] = useState(true);
   const { i18n, t } = useTranslation();
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
+    from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+    to: new Date()
+  });
+  const [chartView, setChartView] = useState<'bar' | 'line' | 'area'>('bar');
+  const [timeRange, setTimeRange] = useState<'day' | 'week' | 'month' | 'year'>('month');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -214,6 +236,29 @@ const AdminDashboardPage = () => {
     revenue: item.total_revenue
   }));
 
+  // Custom tooltip component for better styling
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-100">
+          <p className="font-medium text-gray-900 mb-2">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center gap-2">
+              <div 
+                className="w-3 h-3 rounded-full" 
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="text-sm text-gray-600">
+                {entry.name}: {entry.name === 'revenue' ? `TND${entry.value.toFixed(2)}` : entry.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6 md:space-y-8">
@@ -280,55 +325,149 @@ const AdminDashboardPage = () => {
           {/* Best Sellers Chart */}
           <Card>
             <CardHeader>
-              <CardTitle>{t('admin.dashboard.bestSellers.title')}</CardTitle>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <CardTitle>{t('admin.dashboard.bestSellers.title')}</CardTitle>
+                <div className="flex items-center gap-2">
+                  <Select
+                    value={chartView}
+                    onValueChange={(value: 'bar' | 'line' | 'area') => setChartView(value)}
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Chart Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bar">Bar Chart</SelectItem>
+                      <SelectItem value="line">Line Chart</SelectItem>
+                      <SelectItem value="area">Area Chart</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={timeRange}
+                    onValueChange={(value: 'day' | 'week' | 'month' | 'year') => setTimeRange(value)}
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Time Range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="day">Today</SelectItem>
+                      <SelectItem value="week">This Week</SelectItem>
+                      <SelectItem value="month">This Month</SelectItem>
+                      <SelectItem value="year">This Year</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               {bestSellers.length === 0 ? (
                 <p className="text-gray-500 text-center py-4">{t('admin.dashboard.bestSellers.noData')}</p>
               ) : (
-                <div className="h-[300px] w-full overflow-x-auto">
+                <div className="h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        dataKey="name" 
-                        angle={-45}
-                        textAnchor="end"
-                        height={100}
-                        interval={0}
-                        tick={{ fontSize: 12 }}
-                      />
-                      <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                      <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                      <Tooltip 
-                        formatter={(value: number, name: string) => {
-                          if (name === 'sales') return [`${value} ${t('admin.dashboard.bestSellers.unitsSold')}`, t('admin.dashboard.bestSellers.unitsSold')];
-                          if (name === 'revenue') return [`TND${value.toFixed(2)}`, t('admin.dashboard.bestSellers.revenue')];
-                          return [value, name];
-                        }}
-                        labelFormatter={(label, payload) => {
-                          if (payload && payload[0]) {
-                            const data = payload[0].payload;
-                            return `${data.name} (${data.variant})`;
-                          }
-                          return label;
-                        }}
-                      />
-                      <Bar 
-                        yAxisId="left"
-                        dataKey="sales" 
-                        name={t('admin.dashboard.bestSellers.unitsSold')}
-                        fill="#8884d8" 
-                        radius={[4, 4, 0, 0]}
-                      />
-                      <Bar 
-                        yAxisId="right"
-                        dataKey="revenue" 
-                        name={t('admin.dashboard.bestSellers.revenue')}
-                        fill="#82ca9d" 
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
+                    {chartView === 'bar' ? (
+                      <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis 
+                          dataKey="name" 
+                          angle={-45}
+                          textAnchor="end"
+                          height={100}
+                          interval={0}
+                          tick={{ fontSize: 12 }}
+                          tickLine={false}
+                        />
+                        <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Legend />
+                        <Bar 
+                          yAxisId="left"
+                          dataKey="sales" 
+                          name={t('admin.dashboard.bestSellers.unitsSold')}
+                          fill={COLORS.sales}
+                          radius={[4, 4, 0, 0]}
+                        />
+                        <Bar 
+                          yAxisId="right"
+                          dataKey="revenue" 
+                          name={t('admin.dashboard.bestSellers.revenue')}
+                          fill={COLORS.revenue}
+                          radius={[4, 4, 0, 0]}
+                        />
+                      </BarChart>
+                    ) : chartView === 'line' ? (
+                      <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis 
+                          dataKey="name" 
+                          angle={-45}
+                          textAnchor="end"
+                          height={100}
+                          interval={0}
+                          tick={{ fontSize: 12 }}
+                          tickLine={false}
+                        />
+                        <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Legend />
+                        <Line 
+                          yAxisId="left"
+                          type="monotone"
+                          dataKey="sales" 
+                          name={t('admin.dashboard.bestSellers.unitsSold')}
+                          stroke={COLORS.sales}
+                          strokeWidth={2}
+                          dot={{ r: 4 }}
+                          activeDot={{ r: 6 }}
+                        />
+                        <Line 
+                          yAxisId="right"
+                          type="monotone"
+                          dataKey="revenue" 
+                          name={t('admin.dashboard.bestSellers.revenue')}
+                          stroke={COLORS.revenue}
+                          strokeWidth={2}
+                          dot={{ r: 4 }}
+                          activeDot={{ r: 6 }}
+                        />
+                      </LineChart>
+                    ) : (
+                      <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis 
+                          dataKey="name" 
+                          angle={-45}
+                          textAnchor="end"
+                          height={100}
+                          interval={0}
+                          tick={{ fontSize: 12 }}
+                          tickLine={false}
+                        />
+                        <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Legend />
+                        <Area 
+                          yAxisId="left"
+                          type="monotone"
+                          dataKey="sales" 
+                          name={t('admin.dashboard.bestSellers.unitsSold')}
+                          fill={COLORS.sales}
+                          stroke={COLORS.sales}
+                          fillOpacity={0.3}
+                        />
+                        <Area 
+                          yAxisId="right"
+                          type="monotone"
+                          dataKey="revenue" 
+                          name={t('admin.dashboard.bestSellers.revenue')}
+                          fill={COLORS.revenue}
+                          stroke={COLORS.revenue}
+                          fillOpacity={0.3}
+                        />
+                      </AreaChart>
+                    )}
                   </ResponsiveContainer>
                 </div>
               )}
@@ -337,16 +476,47 @@ const AdminDashboardPage = () => {
         </div>
 
         {/* Database Usage Chart */}
-        <Card className="overflow-hidden">
-          <CardHeader className="border-b bg-gray-50/50">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <DatabaseIcon className="h-5 w-5 text-ecommerce-purple" />
-              {t('admin.database.title')}
-            </CardTitle>
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <CardTitle className="flex items-center gap-2">
+                <DatabaseIcon className="h-5 w-5 text-ecommerce-purple" />
+                {t('admin.database.title')}
+              </CardTitle>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {dateRange.from ? (
+                      dateRange.to ? (
+                        <>
+                          {format(dateRange.from, "LLL dd, y")} -{" "}
+                          {format(dateRange.to, "LLL dd, y")}
+                        </>
+                      ) : (
+                        format(dateRange.from, "LLL dd, y")
+                      )
+                    ) : (
+                      <span>Pick a date range</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    initialFocus
+                    mode="range"
+                    defaultMonth={dateRange.from}
+                    selected={dateRange}
+                    onSelect={setDateRange}
+                    numberOfMonths={2}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent>
             {!dbUsage ? (
-              <div className="flex items-center justify-center h-[300px]">
+              <div className="flex items-center justify-center h-[400px]">
                 <div className="animate-pulse flex space-x-4">
                   <div className="rounded-full bg-gray-200 h-12 w-12"></div>
                   <div className="flex-1 space-y-4 py-1">
@@ -422,7 +592,7 @@ const AdminDashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="h-[300px] w-full">
+                <div className="h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -450,9 +620,9 @@ const AdminDashboardPage = () => {
                         ]}
                         cx="50%"
                         cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={2}
+                        innerRadius={80}
+                        outerRadius={120}
+                        paddingAngle={5}
                         dataKey="value"
                       >
                         {dbUsage.usagePercentages && Object.entries(dbUsage.usagePercentages).map(([key, value]) => (
@@ -464,13 +634,21 @@ const AdminDashboardPage = () => {
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
                             return (
-                              <div className="bg-white p-3 rounded-lg shadow-lg border">
+                              <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-100">
                                 <p className="font-medium text-gray-900">{data.name}</p>
                                 <p className="text-sm text-gray-600">{data.value.toFixed(1)}% {t('admin.database.storage.used')}</p>
                               </div>
                             );
                           }
                           return null;
+                        }}
+                      />
+                      <Legend 
+                        layout="vertical" 
+                        verticalAlign="middle" 
+                        align="right"
+                        wrapperStyle={{
+                          paddingLeft: '20px'
                         }}
                       />
                     </PieChart>
