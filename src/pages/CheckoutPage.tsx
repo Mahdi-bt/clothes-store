@@ -150,20 +150,41 @@ const CheckoutPage = () => {
       try {
         setLoading(true);
         const allProducts = await productService.getProducts();
+        
+        // Validate that we have products
+        if (!allProducts || allProducts.length === 0) {
+          throw new Error('No products found');
+        }
+
         const productsMap = allProducts.reduce((acc, product) => {
+          // Validate required product fields
+          if (!product.id || !product.selling_price) {
+            console.warn(`Product missing required fields:`, product);
+            return acc;
+          }
           acc[product.id] = product;
           return acc;
         }, {} as Record<string, Product>);
+
+        // Validate that we have all products from the cart
+        const missingProducts = items.filter(item => !productsMap[item.productId]);
+        if (missingProducts.length > 0) {
+          console.error('Missing products:', missingProducts);
+          throw new Error('Some products in cart could not be found');
+        }
+
         setProducts(productsMap);
       } catch (error) {
         console.error('Error fetching products:', error);
+        toast.error(t('checkout.errors.fetchFailed'));
+        navigate('/cart');
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [items, navigate, t]);
   
   // Get delegations for selected state
   const delegations = React.useMemo(() => {
@@ -242,9 +263,14 @@ const CheckoutPage = () => {
       // Create order items
       const orderItems = items.map(item => {
         const product = products[item.productId];
+        if (!product) {
+          throw new Error(`Product not found for ID: ${item.productId}`);
+        }
+
         const finalPrice = product.discount
           ? product.selling_price - (product.selling_price * (product.discount / 100))
           : product.selling_price;
+
         return {
           order_id: order.id,
           product_variant_id: item.variantId,
@@ -254,6 +280,11 @@ const CheckoutPage = () => {
           discount: product.discount || 0
         };
       });
+
+      // Validate that all products were found
+      if (orderItems.length !== items.length) {
+        throw new Error('Some products could not be found');
+      }
 
       const { error: itemsError } = await supabase
         .from('order_items')
