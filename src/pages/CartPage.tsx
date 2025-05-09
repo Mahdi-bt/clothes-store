@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import MainLayout from '../components/layouts/MainLayout';
 import { useCart } from '../context/CartContext';
 import { Button } from '@/components/ui/button';
+import { CardPrice } from '@/components/ui/card';
 import { MinusCircle, PlusCircle, Trash2, ShoppingCart, AlertCircle } from 'lucide-react';
 import { productService } from '../lib/services/productService';
 import { deliveryService } from '../lib/services/deliveryService';
@@ -220,9 +221,9 @@ const CartPage = () => {
                       <div className="w-full md:hidden flex justify-between items-center mt-4 text-sm">
                         <div>
                           <div className="font-semibold text-gray-500">Price</div>
-                          <div className="font-bold text-ecommerce-deep-purple">
+                          <CardPrice className="text-base">
                             {formatCurrency(finalPrice)}
-                          </div>
+                          </CardPrice>
                         </div>
                         
                         <div>
@@ -263,9 +264,9 @@ const CartPage = () => {
                       
                       {/* Desktop Layout - Price, Quantity, Total */}
                       <div className="hidden md:block w-1/5 text-center">
-                        <span className="font-bold text-ecommerce-deep-purple">
+                        <CardPrice>
                           {formatCurrency(finalPrice)}
-                        </span>
+                        </CardPrice>
                       </div>
                       
                       <div className="hidden md:flex w-1/5 items-center justify-center">
@@ -286,8 +287,10 @@ const CartPage = () => {
                         </button>
                       </div>
                       
-                      <div className="hidden md:block w-1/5 text-center font-bold text-ecommerce-deep-purple">
-                        {formatCurrency(finalPrice * item.quantity)}
+                      <div className="hidden md:block w-1/5 text-center">
+                        <CardPrice>
+                          {formatCurrency(finalPrice * item.quantity)}
+                        </CardPrice>
                       </div>
                       
                       <button

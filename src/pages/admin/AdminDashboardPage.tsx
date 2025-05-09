@@ -23,7 +23,8 @@ import {
   AreaChart,
   Area,
   LineChart,
-  Line
+  Line,
+  TooltipProps
 } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -31,6 +32,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 
 interface OrderItem {
   id: string;
@@ -90,6 +92,23 @@ interface DatabaseUsage {
   };
 }
 
+interface ChartData {
+  name: string;
+  variant: string;
+  sales: number;
+  revenue: number;
+}
+
+interface CustomTooltipProps extends TooltipProps<number, string> {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    name: string;
+    color: string;
+  }>;
+  label?: string;
+}
+
 const COLORS = {
   dataSize: '#3B82F6',    // Blue
   indexSize: '#10B981',   // Green
@@ -119,10 +138,7 @@ const AdminDashboardPage = () => {
   const [dbUsage, setDbUsage] = useState<DatabaseUsage | null>(null);
   const [loading, setLoading] = useState(true);
   const { i18n, t } = useTranslation();
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
     to: new Date()
   });
@@ -237,12 +253,12 @@ const AdminDashboardPage = () => {
   }));
 
   // Custom tooltip component for better styling
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-100">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index) => (
             <div key={index} className="flex items-center gap-2">
               <div 
                 className="w-3 h-3 rounded-full" 
@@ -507,7 +523,14 @@ const AdminDashboardPage = () => {
                     mode="range"
                     defaultMonth={dateRange.from}
                     selected={dateRange}
-                    onSelect={setDateRange}
+                    onSelect={(range: DateRange | undefined) => {
+                      if (range) {
+                        setDateRange({
+                          from: range.from || new Date(),
+                          to: range.to || new Date()
+                        });
+                      }
+                    }}
                     numberOfMonths={2}
                   />
                 </PopoverContent>
